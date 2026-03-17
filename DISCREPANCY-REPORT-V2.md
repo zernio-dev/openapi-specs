@@ -1,7 +1,7 @@
 # VERIFIED API Discrepancy Report
 
 **Generated:** 2026-02-02  
-**Purpose:** Verified analysis of Late's codebase API usage against official documentation  
+**Purpose:** Verified analysis of Zernio's codebase API usage against official documentation  
 **Methodology:** Cross-checked each discrepancy claim against official API documentation
 
 ## Executive Summary

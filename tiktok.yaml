@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
   title: TikTok Business APIs
-  description: TikTok Business API endpoints used by Late for content publishing, creator management, and analytics
+  description: TikTok Business API endpoints used by Zernio for content publishing, creator management, and analytics
   version: 2.0.0
   contact:
-    name: Late Support
-    url: https://getlate.dev
+    name: Zernio Support
+    url: https://zernio.com
 servers:
   - url: https://open.tiktokapis.com/v2
     description: TikTok Open API

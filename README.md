@@ -1,6 +1,6 @@
 # 🌐 Social Media OpenAPI Specs
 
-OpenAPI 3.0 specifications for all 13 social media platforms supported by [Late](https://getlate.dev).
+OpenAPI 3.0 specifications for all 13 social media platforms supported by [Zernio](https://zernio.com).
 
 Use these specs to explore, test, and build integrations with the APIs behind the most popular social media platforms.
 
@@ -37,11 +37,11 @@ These specs work with any OpenAPI-compatible tool:
 - **[Insomnia](https://insomnia.rest/)** — API client with OpenAPI support
 - **Code generation** — Use [OpenAPI Generator](https://openapi-generator.tech/) to generate client SDKs
 
-## 💜 About Late
+## 💜 About Zernio
 
-**[Late](https://getlate.dev)** is a social media API for developers. One unified API to publish content across all 13 platforms listed above. No need to wrangle individual platform APIs, OAuth flows, or rate limits yourself.
+**[Zernio](https://zernio.com)** is a social media API for developers. One unified API to publish content across all 13 platforms listed above. No need to wrangle individual platform APIs, OAuth flows, or rate limits yourself.
 
-👉 **[Get started](https://getlate.dev)** — Start building for free.
+👉 **[Get started](https://zernio.com)** — Start building for free.
 
 📺 **[Watch the demo](https://www.youtube.com/watch?v=2TzRQn-Ib_s)**
 
