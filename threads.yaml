@@ -1327,6 +1327,11 @@ components:
           type: string
           maxLength: 125
           description: Alt text for media accessibility
+        topic_tag:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Topic tag for post categorization and discoverability. Must be 1-50 characters, no periods (.) or ampersands (&). Added July 14, 2025.
       required: [media_type]
       oneOf:
         - $ref: '#/components/schemas/TextThread'
