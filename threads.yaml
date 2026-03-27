@@ -33,6 +33,7 @@ paths:
     post:
       tags: [Publishing]
       summary: Create thread
+      operationId: createThread
       description: |
         Create a new thread (post) on Threads. Supports text posts, single media posts, 
         and carousel posts with multiple images.
@@ -98,6 +99,7 @@ paths:
     post:
       tags: [Publishing]
       summary: Publish thread
+      operationId: publishThread
       description: |
         Publish a previously created thread. This is a two-step process:
         1. Create the thread using `/me/threads`
@@ -146,6 +148,7 @@ paths:
     get:
       tags: [Profile]
       summary: Get user profile
+      operationId: getUserProfile
       description: Retrieve the authenticated user's Threads profile information
       parameters:
         - name: fields
@@ -177,6 +180,7 @@ paths:
     get:
       tags: [Content Management]
       summary: Get user threads
+      operationId: getUserThreads
       description: Retrieve threads (posts) published by the authenticated user
       parameters:
         - name: fields
@@ -237,6 +241,7 @@ paths:
     get:
       tags: [Content Management]
       summary: Get thread details
+      operationId: getThreadDetails
       description: Retrieve details of a specific thread by ID
       parameters:
         - name: thread-id
@@ -271,6 +276,7 @@ paths:
     get:
       tags: [Analytics]
       summary: Get thread insights
+      operationId: getThreadInsights
       description: Retrieve analytics and performance metrics for a specific thread
       parameters:
         - name: thread-id
@@ -349,6 +355,7 @@ paths:
     get:
       tags: [Analytics]
       summary: Get user insights
+      operationId: getUserInsights
       description: Retrieve analytics for the authenticated user's account
       parameters:
         - name: metric
@@ -406,6 +413,7 @@ paths:
     get:
       tags: [Replies]
       summary: Get thread replies
+      operationId: getThreadReplies
       description: Retrieve replies to a specific thread
       parameters:
         - name: thread-id
@@ -451,6 +459,7 @@ paths:
     post:
       tags: [Replies]
       summary: Create reply
+      operationId: createReply
       description: Reply to a specific thread
       parameters:
         - name: thread-id
@@ -510,6 +519,7 @@ paths:
     delete:
       tags: [Replies]
       summary: Delete reply
+      operationId: deleteReply
       description: Delete a reply created by the authenticated user
       parameters:
         - name: reply-id
@@ -543,6 +553,7 @@ paths:
     delete:
       tags: [Content Management]
       summary: Delete thread
+      operationId: deleteThread
       description: Delete a thread created by the authenticated user
       parameters:
         - name: thread-id
@@ -576,6 +587,7 @@ paths:
     post:
       tags: [Media]
       summary: Upload media
+      operationId: uploadMedia
       description: Upload an image or video to use in threads
       requestBody:
         required: true
@@ -628,6 +640,7 @@ paths:
     get:
       tags: [Media]
       summary: Get media status
+      operationId: getMediaStatus
       description: Check the processing status of uploaded media
       parameters:
         - name: media-id
@@ -672,6 +685,7 @@ paths:
     get:
       tags: [User Management]
       summary: Get user accounts
+      operationId: getUserAccounts
       description: Get all Instagram Business accounts connected to the user
       responses:
         '200':
@@ -702,6 +716,7 @@ paths:
     post:
       tags: [Publishing]
       summary: Bulk publish threads
+      operationId: bulkPublishThreads
       description: Publish multiple threads in a batch operation
       requestBody:
         required: true
@@ -746,6 +761,7 @@ paths:
     post:
       tags: [Content Management]
       summary: Hide thread
+      operationId: hideThread
       description: Hide a thread from the user's profile
       parameters:
         - name: thread-id
@@ -771,6 +787,7 @@ paths:
     post:
       tags: [Content Management]
       summary: Unhide thread
+      operationId: unhideThread
       description: Unhide a previously hidden thread
       parameters:
         - name: thread-id
@@ -797,6 +814,7 @@ paths:
     get:
       tags: [Conversations]
       summary: Get conversation thread
+      operationId: getConversationThread
       description: Get the full conversation thread including all replies
       parameters:
         - name: thread-id
@@ -831,6 +849,7 @@ paths:
     get:
       tags: [Media Management]
       summary: Get media containers
+      operationId: getMediaContainers
       description: Get all media containers created by the user
       parameters:
         - name: limit
@@ -881,6 +900,7 @@ paths:
     get:
       tags: [Analytics]
       summary: Get demographic insights
+      operationId: getDemographicInsights
       description: Get demographic information about followers
       parameters:
         - name: metric
@@ -923,6 +943,7 @@ paths:
     get:
       tags: [Analytics]
       summary: Get performance insights
+      operationId: getPerformanceInsights
       description: Get detailed performance metrics for the account
       parameters:
         - name: metric
@@ -966,6 +987,7 @@ paths:
     get:
       tags: [Content Discovery]
       summary: Get user feed
+      operationId: getUserFeed
       description: Get threads from user's feed
       parameters:
         - name: limit
@@ -1013,6 +1035,7 @@ paths:
     get:
       tags: [Content Discovery]
       summary: Get trending threads
+      operationId: getTrendingThreads
       description: Get currently trending threads
       parameters:
         - name: limit
@@ -1049,6 +1072,7 @@ paths:
     get:
       tags: [Search]
       summary: Search threads
+      operationId: searchThreads
       description: Search for threads and users
       parameters:
         - name: q
@@ -1103,6 +1127,7 @@ paths:
     get:
       tags: [User Management]
       summary: Get followers
+      operationId: getFollowers
       description: Get list of users who follow the authenticated user
       parameters:
         - name: limit
@@ -1144,6 +1169,7 @@ paths:
     get:
       tags: [User Management]
       summary: Get following
+      operationId: getFollowing
       description: Get list of users that the authenticated user is following
       parameters:
         - name: limit
@@ -1186,6 +1212,7 @@ paths:
     get:
       tags: [Account Management]
       summary: Get rate limit status
+      operationId: getRateLimitStatus
       description: Get current rate limit status for publishing
       responses:
         '200':
@@ -1218,6 +1245,7 @@ paths:
     get:
       tags: [Webhooks]
       summary: Get webhook subscriptions
+      operationId: getWebhookSubscriptions
       description: Get current webhook subscriptions
       responses:
         '200':
@@ -1248,6 +1276,7 @@ paths:
     post:
       tags: [Webhooks]
       summary: Create webhook subscription
+      operationId: createWebhookSubscription
       description: Subscribe to webhook events for real-time updates
       requestBody:
         required: true

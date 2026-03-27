@@ -38,6 +38,7 @@ paths:
     post:
       tags: [Submissions]
       summary: Submit a post
+      operationId: submitPost
       description: |
         Submit a link or text post to a subreddit. Supports various post types including
         text posts, link posts, image posts, video posts, and polls.
@@ -136,6 +137,7 @@ paths:
     get:
       tags: [Submissions]
       summary: Get submission and comments
+      operationId: getSubmissionComments
       description: Get a submission with its comments thread
       parameters:
         - name: article
@@ -220,6 +222,7 @@ paths:
     post:
       tags: [Comments]
       summary: Add a comment
+      operationId: addComment
       description: Add a comment to a submission or reply to an existing comment
       requestBody:
         required: true
@@ -261,6 +264,7 @@ paths:
     post:
       tags: [Comments]
       summary: Edit comment or submission text
+      operationId: editUserText
       description: Edit the text of a comment or self-post
       requestBody:
         required: true
@@ -297,6 +301,7 @@ paths:
     post:
       tags: [Comments]
       summary: Delete comment or submission
+      operationId: deleteContent
       description: Delete a comment or submission
       requestBody:
         required: true
@@ -327,6 +332,7 @@ paths:
     post:
       tags: [Voting]
       summary: Vote on a post or comment
+      operationId: voteOnItem
       description: Cast an upvote, downvote, or remove vote
       requestBody:
         required: true
@@ -361,6 +367,7 @@ paths:
     get:
       tags: [Submissions]
       summary: Get information about links/submissions
+      operationId: getSubmissionInfo
       description: |
         Return a listing of links/submissions specified by their fullnames.
         This is useful for getting detailed information about specific submissions by their IDs.
@@ -427,6 +434,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get subreddit information
+      operationId: getSubredditInfo
       description: Get detailed information about a subreddit
       parameters:
         - name: subreddit
@@ -460,6 +468,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get subreddit posts
+      operationId: listSubredditPosts
       description: Get posts from a specific subreddit
       parameters:
         - name: subreddit
@@ -530,6 +539,7 @@ paths:
     get:
       tags: [Users]
       summary: Get user information
+      operationId: getUserInfo
       description: Get public information about a user
       parameters:
         - name: username
@@ -563,6 +573,7 @@ paths:
     get:
       tags: [Users]
       summary: Get current user info
+      operationId: getCurrentUser
       description: Get information about the authenticated user
       responses:
         '200':
@@ -581,6 +592,7 @@ paths:
     get:
       tags: [Users]
       summary: Get user preferences
+      operationId: getUserPreferences
       description: Get the authenticated user's preferences
       responses:
         '200':
@@ -597,6 +609,7 @@ paths:
     patch:
       tags: [Users]
       summary: Update user preferences
+      operationId: updateUserPreferences
       description: Update the authenticated user's preferences
       requestBody:
         required: true
@@ -623,6 +636,7 @@ paths:
     get:
       tags: [Users]
       summary: Get user trophies
+      operationId: getUserTrophies
       description: Get trophies for a specific user
       parameters:
         - name: username
@@ -659,6 +673,7 @@ paths:
     get:
       tags: [Search]
       summary: Search Reddit content
+      operationId: searchContent
       description: Search for submissions, subreddits, or users
       parameters:
         - name: q
@@ -735,6 +750,7 @@ paths:
     get:
       tags: [Messages]
       summary: Get inbox messages
+      operationId: getInboxMessages
       description: Get private messages in the user's inbox
       parameters:
         - name: mark
@@ -777,6 +793,7 @@ paths:
     post:
       tags: [Messages]
       summary: Send private message
+      operationId: sendPrivateMessage
       description: Send a private message to another user
       requestBody:
         required: true
@@ -823,6 +840,7 @@ paths:
     post:
       tags: [Moderation]
       summary: Approve content
+      operationId: approveContent
       description: Approve a submission or comment
       requestBody:
         required: true
@@ -852,6 +870,7 @@ paths:
     post:
       tags: [Moderation]
       summary: Remove content
+      operationId: removeContent
       description: Remove a submission or comment
       requestBody:
         required: true
@@ -885,6 +904,7 @@ paths:
     post:
       tags: [Moderation]
       summary: Distinguish content
+      operationId: distinguishContent
       description: Distinguish a comment or submission as moderator/admin
       requestBody:
         required: true
@@ -923,6 +943,7 @@ paths:
     get:
       tags: [Wiki]
       summary: Get wiki page
+      operationId: getWikiPage
       description: Get the content of a wiki page
       parameters:
         - name: subreddit
@@ -962,6 +983,7 @@ paths:
     post:
       tags: [Wiki]
       summary: Edit wiki page
+      operationId: editWikiPage
       description: Create or edit a wiki page
       parameters:
         - name: subreddit
@@ -1015,6 +1037,7 @@ paths:
     post:
       tags: [User Actions]
       summary: Save content
+      operationId: saveContent
       description: Save a submission or comment
       requestBody:
         required: true
@@ -1041,6 +1064,7 @@ paths:
     post:
       tags: [User Actions]
       summary: Unsave content
+      operationId: unsaveContent
       description: Remove a submission or comment from saved items
       requestBody:
         required: true
@@ -1065,6 +1089,7 @@ paths:
     post:
       tags: [Subscriptions]
       summary: Subscribe to subreddit
+      operationId: updateSubscription
       description: Subscribe or unsubscribe from a subreddit
       requestBody:
         required: true
@@ -1102,6 +1127,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get hot posts from subreddit
+      operationId: getHotPosts
       description: Retrieve hot (trending) posts from a specific subreddit
       parameters:
         - name: subreddit
@@ -1126,6 +1152,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get new posts from subreddit  
+      operationId: getNewPosts
       description: Retrieve newest posts from a specific subreddit in chronological order
       parameters:
         - name: subreddit
@@ -1150,6 +1177,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get top posts from subreddit
+      operationId: getTopPosts
       description: Retrieve top-rated posts from a specific subreddit with time filtering
       parameters:
         - name: subreddit
@@ -1181,6 +1209,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get rising posts from subreddit
+      operationId: getRisingPosts
       description: Retrieve rapidly trending posts gaining traction
       parameters:
         - name: subreddit
@@ -1205,6 +1234,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get controversial posts from subreddit
+      operationId: getControversialPosts
       description: Retrieve posts with high engagement but mixed reactions
       parameters:
         - name: subreddit
@@ -1237,6 +1267,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get posts from all subreddits
+      operationId: listAllPosts
       description: Aggregate content from all public subreddits
       parameters:
         - $ref: '#/components/parameters/Count'
@@ -1255,6 +1286,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get popular posts
+      operationId: getPopularPosts
       description: Retrieve popular posts filtered by location
       parameters:
         - $ref: '#/components/parameters/Count'
@@ -1278,6 +1310,7 @@ paths:
     get:
       tags: [Subreddits]
       summary: Get personalized best posts
+      operationId: getPersonalizedBestPosts
       description: Returns personalized best content for authenticated users
       parameters:
         - $ref: '#/components/parameters/Count'
@@ -1299,6 +1332,7 @@ paths:
     get:
       tags: [Users]
       summary: Get user's submitted posts
+      operationId: getUserSubmittedPosts
       description: Retrieve posts submitted by a specific user
       parameters:
         - name: username
@@ -1335,6 +1369,7 @@ paths:
     get:
       tags: [Users]
       summary: Get user's comments
+      operationId: getUserComments
       description: Retrieve comments made by a specific user
       parameters:
         - name: username
@@ -1372,6 +1407,7 @@ paths:
     get:
       tags: [Users]
       summary: Get karma breakdown by subreddit
+      operationId: getKarmaBreakdown
       description: Retrieve authenticated user's karma breakdown by subreddit
       responses:
         '200':
@@ -1404,6 +1440,7 @@ paths:
     get:
       tags: [Search]
       summary: Search within a subreddit
+      operationId: searchSubreddit
       description: Search for posts within a specific subreddit
       parameters:
         - name: subreddit
@@ -1447,6 +1484,7 @@ paths:
     get:
       tags: [Search]
       summary: Search for subreddits
+      operationId: searchSubreddits
       description: Find subreddits matching search terms
       parameters:
         - name: q
@@ -1473,6 +1511,7 @@ paths:
     get:
       tags: [Messages]
       summary: Get unread messages
+      operationId: getUnreadMessages
       description: Retrieve only unread messages from inbox
       parameters:
         - $ref: '#/components/parameters/Count'
@@ -1493,6 +1532,7 @@ paths:
     get:
       tags: [Messages]
       summary: Get sent messages
+      operationId: getSentMessages
       description: Retrieve messages sent by the authenticated user
       parameters:
         - $ref: '#/components/parameters/Count'
@@ -1513,6 +1553,7 @@ paths:
     post:
       tags: [Messages]
       summary: Mark messages as read
+      operationId: markMessagesRead
       description: Mark one or more messages as read
       requestBody:
         required: true
@@ -1544,6 +1585,7 @@ paths:
     get:
       tags: [Moderation]
       summary: Get moderation queue
+      operationId: getModerationQueue
       description: Retrieve posts and comments requiring moderation attention
       parameters:
         - name: subreddit
@@ -1570,6 +1612,7 @@ paths:
     get:
       tags: [Moderation]
       summary: Get reported content
+      operationId: getReportedContent
       description: Retrieve reported posts and comments
       parameters:
         - name: subreddit
@@ -1596,6 +1639,7 @@ paths:
     get:
       tags: [Moderation]
       summary: Get subreddit moderators
+      operationId: listModerators
       description: List moderators of a subreddit
       parameters:
         - name: subreddit
@@ -1637,6 +1681,7 @@ paths:
     post:
       tags: [Moderation]
       summary: Set user flair
+      operationId: setUserFlair
       description: Set or clear user flair in a subreddit
       parameters:
         - name: subreddit
@@ -1679,6 +1724,7 @@ paths:
     get:
       tags: [Moderation]
       summary: Get flair list
+      operationId: getFlairList
       description: Get list of users with flair in a subreddit
       parameters:
         - name: subreddit
@@ -1717,6 +1763,7 @@ paths:
     get:
       tags: [Users]
       summary: Get multireddit
+      operationId: getMultireddit
       description: Get information about a multireddit
       parameters:
         - name: username
@@ -1762,6 +1809,7 @@ paths:
     get:
       tags: [Wiki]
       summary: Get wiki page list
+      operationId: listWikiPages
       description: Get list of wiki pages in a subreddit
       parameters:
         - name: subreddit
@@ -1789,6 +1837,7 @@ paths:
     get:
       tags: [Wiki]
       summary: Get wiki page revisions
+      operationId: getWikiRevisions
       description: Get revision history for a wiki page
       parameters:
         - name: subreddit
@@ -1818,6 +1867,7 @@ paths:
     post:
       tags: [Users]
       summary: Add friend
+      operationId: addFriend
       description: Add another user as a friend
       requestBody:
         required: true
@@ -1848,6 +1898,7 @@ paths:
     post:
       tags: [Users]
       summary: Remove friend
+      operationId: removeFriend
       description: Remove a user from friends list
       requestBody:
         required: true

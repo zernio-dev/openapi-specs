@@ -49,6 +49,7 @@ paths:
     get:
       tags: [Accounts]
       summary: List accounts
+      operationId: listAccounts
       description: Lists all accounts for the authenticated user
       parameters:
         - name: pageSize
@@ -86,6 +87,7 @@ paths:
     post:
       tags: [Accounts]
       summary: Create account
+      operationId: createAccount
       description: Creates a new business account
       requestBody:
         required: true
@@ -115,6 +117,7 @@ paths:
     get:
       tags: [Accounts]
       summary: Get account
+      operationId: getAccount
       description: Gets the specified account
       parameters:
         - name: name
@@ -141,6 +144,7 @@ paths:
     put:
       tags: [Accounts]
       summary: Update account
+      operationId: updateAccount
       description: Updates the specified business account
       parameters:
         - name: name
@@ -174,6 +178,7 @@ paths:
     get:
       tags: [Locations]
       summary: List locations
+      operationId: listLocations
       description: Lists locations for the specified account
       parameters:
         - name: parent
@@ -229,6 +234,7 @@ paths:
     post:
       tags: [Locations]
       summary: Create location
+      operationId: createLocation
       description: Creates a new location for the specified account
       parameters:
         - name: parent
@@ -290,6 +296,7 @@ paths:
     get:
       tags: [Locations]
       summary: Get location
+      operationId: getLocation
       description: Gets the specified location
       parameters:
         - name: name
@@ -326,6 +333,7 @@ paths:
     patch:
       tags: [Locations]
       summary: Update location
+      operationId: updateLocation
       description: Updates the specified location
       parameters:
         - name: name
@@ -373,6 +381,7 @@ paths:
     delete:
       tags: [Locations]
       summary: Delete location
+      operationId: deleteLocation
       description: Deletes the specified location
       parameters:
         - name: name
@@ -402,6 +411,7 @@ paths:
     get:
       tags: [Local Posts]
       summary: List local posts
+      operationId: listLocalPosts
       description: Returns a list of local posts associated with a location
       parameters:
         - name: parent
@@ -441,6 +451,7 @@ paths:
     post:
       tags: [Local Posts]
       summary: Create local post
+      operationId: createLocalPost
       description: Creates a new local post for the specified location
       parameters:
         - name: parent
@@ -500,6 +511,7 @@ paths:
     get:
       tags: [Local Posts]
       summary: Get local post
+      operationId: getLocalPost
       description: Gets the specified local post
       parameters:
         - name: name
@@ -523,6 +535,7 @@ paths:
     patch:
       tags: [Local Posts]
       summary: Update local post
+      operationId: updateLocalPost
       description: Updates the specified local post
       parameters:
         - name: name
@@ -559,6 +572,7 @@ paths:
     delete:
       tags: [Local Posts]
       summary: Delete local post
+      operationId: deleteLocalPost
       description: Deletes the specified local post
       parameters:
         - name: name
@@ -580,6 +594,7 @@ paths:
     get:
       tags: [Media]
       summary: List media
+      operationId: listMediaItems
       description: Returns a list of media items associated with a location
       parameters:
         - name: parent
@@ -618,6 +633,7 @@ paths:
     post:
       tags: [Media]
       summary: Create media item
+      operationId: createMediaItem
       description: Creates a new media item for the location
       parameters:
         - name: parent
@@ -658,6 +674,7 @@ paths:
     post:
       tags: [Media]
       summary: Start media upload
+      operationId: startMediaUpload
       description: Generates a MediaItemDataRef for media item uploading
       parameters:
         - name: parent
@@ -683,6 +700,7 @@ paths:
     get:
       tags: [Reviews]
       summary: List reviews
+      operationId: listReviews
       description: Returns paginated list of reviews for the specified location
       parameters:
         - name: parent
@@ -728,6 +746,7 @@ paths:
     put:
       tags: [Reviews]
       summary: Update review reply
+      operationId: updateReviewReply
       description: Updates the reply to the specified review
       parameters:
         - name: name
@@ -762,6 +781,7 @@ paths:
     delete:
       tags: [Reviews]
       summary: Delete review reply
+      operationId: deleteReviewReply
       description: Deletes the response to the specified review
       parameters:
         - name: name
@@ -783,6 +803,7 @@ paths:
     get:
       tags: [Q&A]
       summary: List questions
+      operationId: listQuestions
       description: Returns paginated list of questions for a specified location
       parameters:
         - name: parent
@@ -840,6 +861,7 @@ paths:
     post:
       tags: [Q&A]
       summary: Create question
+      operationId: createQuestion
       description: Adds a question for the specified location
       parameters:
         - name: parent
@@ -877,6 +899,7 @@ paths:
     post:
       tags: [Q&A]
       summary: Upsert answer
+      operationId: upsertAnswer
       description: Creates an answer or updates the existing answer for a question
       parameters:
         - name: parent
@@ -915,6 +938,7 @@ paths:
     post:
       tags: [Insights]
       summary: Report location insights
+      operationId: reportLocationInsights
       description: Returns insights for one or more metrics by location
       parameters:
         - name: name
@@ -963,6 +987,7 @@ paths:
     get:
       tags: [Categories]
       summary: List business categories
+      operationId: listCategories
       description: Returns a list of business categories
       parameters:
         - name: languageCode
@@ -1019,6 +1044,7 @@ paths:
     post:
       tags: [Verification]
       summary: Verify location
+      operationId: verifyLocation
       description: Starts the verification process for a location
       parameters:
         - name: name
@@ -1057,6 +1083,7 @@ paths:
     post:
       tags: [Verification]
       summary: Fetch verification options
+      operationId: fetchVerificationOptions
       description: Reports all eligible verification options for a location
       parameters:
         - name: name
@@ -1098,6 +1125,7 @@ paths:
     get:
       tags: [Food Menus]
       summary: Get food menus
+      operationId: getFoodMenus
       description: Returns the food menus for a location
       servers:
         - url: https://mybusiness.googleapis.com
@@ -1124,6 +1152,7 @@ paths:
     patch:
       tags: [Food Menus]
       summary: Update food menus
+      operationId: updateFoodMenus
       description: Updates the food menus for a location
       servers:
         - url: https://mybusiness.googleapis.com

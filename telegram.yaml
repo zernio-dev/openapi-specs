@@ -4475,3 +4475,4 @@ paths:
       summary: Set Chat Permissions
       description: |
         Use this method to set default chat
+      operationId: setChatPermissions

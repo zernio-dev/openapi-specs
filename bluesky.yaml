@@ -26,6 +26,7 @@ paths:
     get:
       tags: [Actor]
       summary: Get actor preferences
+      operationId: getActorPreferences
       description: Get user preferences and settings
       security:
         - BearerAuth: []
@@ -41,6 +42,7 @@ paths:
     post:
       tags: [Actor]
       summary: Update actor preferences
+      operationId: updateActorPreferences
       description: Update user preferences and settings
       security:
         - BearerAuth: []
@@ -58,6 +60,7 @@ paths:
     get:
       tags: [Actor]
       summary: Get actor profile
+      operationId: getActorProfile
       description: Get detailed profile information for a user
       parameters:
         - name: actor
@@ -78,6 +81,7 @@ paths:
     get:
       tags: [Actor]
       summary: Get multiple actor profiles
+      operationId: getActorProfiles
       description: Get profile information for multiple users
       parameters:
         - name: actors
@@ -105,6 +109,7 @@ paths:
     get:
       tags: [Actor]
       summary: Get suggested actors to follow
+      operationId: getSuggestedActors
       description: Get a list of suggested users to follow
       parameters:
         - name: limit
@@ -135,6 +140,7 @@ paths:
     get:
       tags: [Actor]
       summary: Search for actors
+      operationId: searchActors
       description: Search for users by handle or display name
       parameters:
         - name: q
@@ -171,6 +177,7 @@ paths:
     get:
       tags: [Actor]
       summary: Typeahead search for actors
+      operationId: searchActorsTypeahead
       description: Fast typeahead search for users
       parameters:
         - name: q
@@ -202,6 +209,7 @@ paths:
     get:
       tags: [Feed]
       summary: Get timeline feed
+      operationId: getTimeline
       description: Get the user's timeline feed
       security:
         - BearerAuth: []
@@ -238,6 +246,7 @@ paths:
     get:
       tags: [Feed]
       summary: Get author's feed
+      operationId: getAuthorFeed
       description: Get posts from a specific author
       parameters:
         - name: actor
@@ -280,6 +289,7 @@ paths:
     get:
       tags: [Feed]
       summary: Get posts by URIs
+      operationId: getPostsByUris
       description: Get posts by their AT-URIs
       parameters:
         - name: uris
@@ -307,6 +317,7 @@ paths:
     get:
       tags: [Feed]
       summary: Get post thread
+      operationId: getPostThread
       description: Get a post and its thread (replies)
       parameters:
         - name: uri
@@ -342,6 +353,7 @@ paths:
     get:
       tags: [Feed]
       summary: Get post likes
+      operationId: getPostLikes
       description: Get users who liked a specific post
       parameters:
         - name: uri
@@ -392,6 +404,7 @@ paths:
     get:
       tags: [Feed]
       summary: Get post reposts
+      operationId: getPostRepostedBy
       description: Get users who reposted a specific post
       parameters:
         - name: uri
@@ -442,6 +455,7 @@ paths:
     get:
       tags: [Feed]
       summary: Search posts
+      operationId: searchPosts
       description: Search for posts by content
       parameters:
         - name: q
@@ -531,6 +545,7 @@ paths:
     post:
       tags: [Video]
       summary: Upload video
+      operationId: uploadVideo
       description: Upload a video file to Bluesky for use in posts
       security:
         - BearerAuth: []
@@ -576,6 +591,7 @@ paths:
     get:
       tags: [Video]
       summary: Get video processing status
+      operationId: getVideoProcessingStatus
       description: Check the processing status of an uploaded video
       security:
         - BearerAuth: []
@@ -613,6 +629,7 @@ paths:
     get:
       tags: [Video]
       summary: Get video definitions
+      operationId: getVideoDefinitions
       description: Get video-related type definitions and limits
       responses:
         '200':
@@ -639,6 +656,7 @@ paths:
     get:
       tags: [Graph]
       summary: Get follows
+      operationId: getFollows
       description: Get users that an actor follows
       parameters:
         - name: actor
@@ -677,6 +695,7 @@ paths:
     get:
       tags: [Graph]
       summary: Get followers
+      operationId: getFollowers
       description: Get users that follow an actor
       parameters:
         - name: actor
@@ -715,6 +734,7 @@ paths:
     get:
       tags: [Graph]
       summary: Get blocked users
+      operationId: getBlockedUsers
       description: Get users that the authenticated user has blocked
       security:
         - BearerAuth: []
@@ -747,6 +767,7 @@ paths:
     get:
       tags: [Graph]
       summary: Get muted users
+      operationId: getMutedUsers
       description: Get users that the authenticated user has muted
       security:
         - BearerAuth: []
@@ -779,6 +800,7 @@ paths:
     post:
       tags: [Graph]
       summary: Mute an actor
+      operationId: muteAnActor
       description: Mute a specific user
       security:
         - BearerAuth: []
@@ -801,6 +823,7 @@ paths:
     post:
       tags: [Graph]
       summary: Unmute an actor
+      operationId: unmuteAnActor
       description: Unmute a previously muted user
       security:
         - BearerAuth: []
@@ -824,6 +847,7 @@ paths:
     get:
       tags: [Notifications]
       summary: List notifications
+      operationId: listNotifications
       description: Get the user's notifications
       security:
         - BearerAuth: []
@@ -865,6 +889,7 @@ paths:
     get:
       tags: [Notifications]
       summary: Get unread count
+      operationId: getUnreadCount
       description: Get count of unread notifications
       security:
         - BearerAuth: []
@@ -890,6 +915,7 @@ paths:
     post:
       tags: [Notifications]
       summary: Mark notifications as seen
+      operationId: markNotificationsAsSeen
       description: Update the last-seen timestamp for notifications
       security:
         - BearerAuth: []
@@ -914,6 +940,7 @@ paths:
     get:
       tags: [Chat]
       summary: List conversations
+      operationId: listConversations
       description: Get the user's conversation list
       security:
         - BearerAuth: []
@@ -946,6 +973,7 @@ paths:
     get:
       tags: [Chat]
       summary: Get conversation
+      operationId: getConversation
       description: Get a specific conversation
       security:
         - BearerAuth: []
@@ -971,6 +999,7 @@ paths:
     get:
       tags: [Chat]
       summary: Get conversation messages
+      operationId: getConversationMessages
       description: Get messages from a specific conversation
       security:
         - BearerAuth: []
@@ -1009,6 +1038,7 @@ paths:
     post:
       tags: [Chat]
       summary: Send message
+      operationId: sendMessage
       description: Send a message to a conversation
       security:
         - BearerAuth: []
@@ -1047,6 +1077,7 @@ paths:
     post:
       tags: [Repository]
       summary: Create record
+      operationId: createRecord
       description: Create a new record in the repository
       security:
         - BearerAuth: []
@@ -1097,6 +1128,7 @@ paths:
     post:
       tags: [Repository]
       summary: Put record
+      operationId: putRecord
       description: Update or create a record at a specific path
       security:
         - BearerAuth: []
@@ -1150,6 +1182,7 @@ paths:
     post:
       tags: [Repository]
       summary: Delete record
+      operationId: deleteRecord
       description: Delete a record from the repository
       security:
         - BearerAuth: []
@@ -1191,6 +1224,7 @@ paths:
     get:
       tags: [Repository]
       summary: Get record
+      operationId: getRecord
       description: Get a specific record from the repository
       parameters:
         - name: repo
@@ -1236,6 +1270,7 @@ paths:
     post:
       tags: [Authentication]
       summary: Create session
+      operationId: createSession
       description: Create an authenticated session
       requestBody:
         required: true
