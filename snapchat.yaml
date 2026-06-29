@@ -367,7 +367,7 @@ paths:
     get:
       summary: List Public Profile Change Logs
       description: Returns a list of signed URLs to change logs containing IDs of public profiles that were created, modified, or deleted.
-      operationId: listChangeLogss
+      operationId: listChangeLogs
       parameters:
         - name: start_at_timestamp
           in: query

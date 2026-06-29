@@ -298,6 +298,7 @@ paths:
       servers:
         - url: https://www.tiktok.com/v2
       summary: Get TikTok authorization URL
+      operationId: getAuthorizationUrl
       description: Redirect user to TikTok authorization page
       parameters:
         - name: client_key
@@ -345,6 +346,7 @@ paths:
   /oauth/token/:
     post:
       summary: Exchange authorization code for access token or refresh token
+      operationId: exchangeToken
       requestBody:
         required: true
         content:
@@ -393,6 +395,7 @@ paths:
   /v2/user/info/:
     get:
       summary: Get user profile information
+      operationId: getUserInfoV2
       description: |
         Returns basic information for a given TikTok user. This is the v2 API endpoint (current).
         Requires relevant scopes to be authorized by the TikTok user.
@@ -432,6 +435,7 @@ paths:
   /user/info/:
     post:
       summary: Get user profile information (v1 - Deprecated)
+      operationId: getUserInfoV1
       description: |
         **DEPRECATED**: Use GET /v2/user/info/ instead.
         This is the legacy v1 API endpoint. TikTok recommends migrating to v2.
@@ -476,6 +480,7 @@ paths:
   /post/publish/creator_info/query/:
     post:
       summary: Get creator information for UX compliance
+      operationId: getCreatorInfoForUx
       description: Required before showing TikTok posting interface to ensure UX compliance
       security:
         - AccessToken: []
@@ -503,6 +508,7 @@ paths:
   /post/publish/video/init/:
     post:
       summary: Initialize video post (Direct Post or Creator Inbox)
+      operationId: initializeVideoPost
       description: Publish video directly or send to Creator Inbox based on post_mode
       security:
         - AccessToken: []
@@ -546,6 +552,7 @@ paths:
   /post/publish/content/init/:
     post:
       summary: Initialize photo/carousel post (Direct Post or Creator Inbox)
+      operationId: initializeContentPost
       description: Publish photos directly or send to Creator Inbox based on post_mode
       security:
         - AccessToken: []
@@ -600,6 +607,7 @@ paths:
   /post/publish/inbox/video/init/:
     post:
       summary: Send video to Creator Inbox as draft
+      operationId: sendVideoToCreatorInbox
       description: Upload video to Creator Inbox for later publishing (draft mode)
       security:
         - AccessToken: []
@@ -664,6 +672,7 @@ paths:
   /post/publish/status/fetch/:
     post:
       summary: Check publishing status
+      operationId: fetchPublishStatus
       description: Poll the status of a video/photo upload
       security:
         - AccessToken: []
@@ -694,6 +703,7 @@ paths:
   /video/list/:
     post:
       summary: Get user's published videos
+      operationId: listUserVideos
       security:
         - AccessToken: []
       parameters:
@@ -746,6 +756,7 @@ paths:
   /video/query/:
     post:
       summary: Get video analytics
+      operationId: queryVideoAnalytics
       security:
         - AccessToken: []
       parameters:
@@ -792,6 +803,7 @@ paths:
   /comment/publish/:
     post:
       summary: Post comment or reply to comment
+      operationId: publishComment
       description: TikTok comments API is write-only (cannot read existing comments)
       security:
         - AccessToken: []
@@ -839,6 +851,7 @@ paths:
   /comment/delete/:
     post:
       summary: Delete comment
+      operationId: deleteComment
       security:
         - AccessToken: []
       requestBody:
@@ -875,6 +888,7 @@ paths:
   /research/video/query/:
     post:
       summary: Query TikTok public content data (Research API)
+      operationId: queryResearchVideos
       description: Query videos with conditions like region, keywords, hashtags, etc.
       security:
         - AccessToken: []
@@ -998,6 +1012,7 @@ paths:
   /research/user/info/:
     post:
       summary: Get public TikTok account information (Research API)
+      operationId: queryResearchUserInfo
       description: Query public TikTok account information by username
       security:
         - AccessToken: []
@@ -1058,6 +1073,7 @@ paths:
   /oauth/revoke/:
     post:
       summary: Revoke access token
+      operationId: revokeToken
       description: Revoke an access token and invalidate it
       requestBody:
         required: true
@@ -1087,6 +1103,7 @@ paths:
   /oauth/client_credentials/:
     post:
       summary: Get client access token
+      operationId: getClientAccessToken
       description: Generate client access token for Research API
       requestBody:
         required: true
@@ -1128,6 +1145,7 @@ paths:
   /user/info/extended/:
     post:
       summary: Get extended user profile information (Display API)
+      operationId: getExtendedUserInfo
       description: Get extended user information including stats and profile details
       security:
         - AccessToken: []
@@ -1190,6 +1208,7 @@ paths:
   /post/publish/creator_info/query/:
     get:
       summary: Get creator information for UX compliance (alternative endpoint)
+      operationId: getCreatorInfoForUxAlt
       description: Alternative GET endpoint for creator information
       security:
         - AccessToken: []
@@ -1208,6 +1227,7 @@ paths:
   /share/video/:
     post:
       summary: Share video to TikTok app (Share Kit)
+      operationId: shareVideoToApp
       description: Share video content directly to TikTok mobile app
       security:
         - AccessToken: []
@@ -1254,6 +1274,7 @@ paths:
   /video/embed/:
     post:
       summary: Get video embed information
+      operationId: getVideoEmbedInfo
       description: Get embed links and metadata for TikTok videos
       security:
         - AccessToken: []
@@ -1303,6 +1324,7 @@ paths:
   /oauth/token/info/:
     post:
       summary: Get token information
+      operationId: getTokenInfo
       description: Get information about an access token (scopes, expiry, etc.)
       security:
         - AccessToken: []
@@ -1333,6 +1355,7 @@ paths:
   /{upload_url}:
     put:
       summary: Upload video file chunks
+      operationId: uploadFileChunk
       description: Upload video data using chunked upload (for FILE_UPLOAD method)
       parameters:
         - name: upload_url

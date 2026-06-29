@@ -28,6 +28,7 @@ paths:
     get:
       tags: [Activities]
       summary: List channel activities
+      operationId: listChannelActivities
       description: Returns a list of channel activity events that match the request criteria
       parameters:
         - name: part
@@ -98,6 +99,7 @@ paths:
     get:
       tags: [Captions]
       summary: List caption tracks
+      operationId: listCaptionTracks
       description: Returns a list of caption tracks associated with a video
       parameters:
         - name: part
@@ -137,6 +139,7 @@ paths:
     post:
       tags: [Captions]
       summary: Upload caption track
+      operationId: uploadCaptionTrack
       description: Uploads a caption track for a video
       parameters:
         - name: part
@@ -184,6 +187,7 @@ paths:
     put:
       tags: [Captions]
       summary: Update caption track
+      operationId: updateCaptionTrack
       description: Updates an existing caption track
       parameters:
         - name: part
@@ -231,6 +235,7 @@ paths:
     delete:
       tags: [Captions]
       summary: Delete caption track
+      operationId: deleteCaptionTrack
       description: Deletes a caption track
       parameters:
         - name: id
@@ -254,6 +259,7 @@ paths:
     get:
       tags: [Captions]
       summary: Download caption track
+      operationId: downloadCaptionTrack
       description: Downloads a caption track
       parameters:
         - name: id
@@ -299,6 +305,7 @@ paths:
     get:
       tags: [Channels]
       summary: List channels
+      operationId: listChannels
       description: Returns a collection of zero or more channel resources
       parameters:
         - name: part
@@ -370,6 +377,7 @@ paths:
     put:
       tags: [Channels]
       summary: Update channel
+      operationId: updateChannel
       description: Updates a channel's metadata
       parameters:
         - name: part
@@ -404,6 +412,7 @@ paths:
     get:
       tags: [Channel Sections]
       summary: List channel sections
+      operationId: listChannelSections
       description: Returns channel sections that match the request criteria
       parameters:
         - name: part
@@ -447,6 +456,7 @@ paths:
     post:
       tags: [Channel Sections]
       summary: Create channel section
+      operationId: createChannelSection
       description: Adds a channel section to the authenticated user's channel
       parameters:
         - name: part
@@ -484,6 +494,7 @@ paths:
     put:
       tags: [Channel Sections]
       summary: Update channel section
+      operationId: updateChannelSection
       description: Updates a channel section
       parameters:
         - name: part
@@ -516,6 +527,7 @@ paths:
     delete:
       tags: [Channel Sections]
       summary: Delete channel section
+      operationId: deleteChannelSection
       description: Deletes a channel section
       parameters:
         - name: id
@@ -540,6 +552,7 @@ paths:
     get:
       tags: [Videos]
       summary: List videos
+      operationId: listVideos
       description: Returns a list of videos that match the API request parameters
       parameters:
         - name: part
@@ -618,6 +631,7 @@ paths:
     post:
       tags: [Videos]
       summary: Upload video
+      operationId: uploadVideo
       description: Uploads a video to YouTube and optionally sets the video's metadata
       parameters:
         - name: part
@@ -678,6 +692,7 @@ paths:
     put:
       tags: [Videos]
       summary: Update video
+      operationId: updateVideo
       description: Updates a video's metadata
       parameters:
         - name: part
@@ -710,6 +725,7 @@ paths:
     delete:
       tags: [Videos]
       summary: Delete video
+      operationId: deleteVideo
       description: Deletes a YouTube video
       parameters:
         - name: id
@@ -733,6 +749,7 @@ paths:
     post:
       tags: [Videos]
       summary: Rate video
+      operationId: rateVideo
       description: Add a like or dislike rating to a video or remove a rating
       parameters:
         - name: id
@@ -758,6 +775,7 @@ paths:
     get:
       tags: [Videos]
       summary: Get video ratings
+      operationId: getVideoRatings
       description: Retrieves the ratings that the authorized user gave to specified videos
       parameters:
         - name: id
@@ -785,6 +803,7 @@ paths:
     post:
       tags: [Videos]
       summary: Report video abuse
+      operationId: reportVideoAbuse
       description: Report a video for containing abusive content
       parameters:
         - name: onBehalfOfContentOwner
@@ -809,6 +828,7 @@ paths:
     get:
       tags: [Playlists]
       summary: List playlists
+      operationId: listPlaylists
       description: Returns a collection of playlists that match the API request parameters
       parameters:
         - name: part
@@ -870,6 +890,7 @@ paths:
     post:
       tags: [Playlists]
       summary: Create playlist
+      operationId: createPlaylist
       description: Creates a playlist
       parameters:
         - name: part
@@ -907,6 +928,7 @@ paths:
     put:
       tags: [Playlists]
       summary: Update playlist
+      operationId: updatePlaylist
       description: Modifies a playlist
       parameters:
         - name: part
@@ -939,6 +961,7 @@ paths:
     delete:
       tags: [Playlists]
       summary: Delete playlist
+      operationId: deletePlaylist
       description: Deletes a playlist
       parameters:
         - name: id
@@ -963,6 +986,7 @@ paths:
     get:
       tags: [Playlist Items]
       summary: List playlist items
+      operationId: listPlaylistItems
       description: Returns a collection of playlist items that match the API request parameters
       parameters:
         - name: part
@@ -1019,6 +1043,7 @@ paths:
     post:
       tags: [Playlist Items]
       summary: Add item to playlist
+      operationId: addItemToPlaylist
       description: Adds a resource to a playlist
       parameters:
         - name: part
@@ -1051,6 +1076,7 @@ paths:
     put:
       tags: [Playlist Items]
       summary: Update playlist item
+      operationId: updatePlaylistItem
       description: Modifies a playlist item
       parameters:
         - name: part
@@ -1083,6 +1109,7 @@ paths:
     delete:
       tags: [Playlist Items]
       summary: Remove item from playlist
+      operationId: removeItemFromPlaylist
       description: Deletes a playlist item
       parameters:
         - name: id
@@ -1107,6 +1134,7 @@ paths:
     get:
       tags: [Search]
       summary: Search for YouTube content
+      operationId: searchForYoutubeContent
       description: Returns a collection of search results that match the query parameters
       parameters:
         - name: part
@@ -1261,6 +1289,7 @@ paths:
     get:
       tags: [Subscriptions]
       summary: List subscriptions
+      operationId: listSubscriptions
       description: Returns subscription resources that match the API request criteria
       parameters:
         - name: part
@@ -1343,6 +1372,7 @@ paths:
     post:
       tags: [Subscriptions]
       summary: Subscribe to channel
+      operationId: subscribeToChannel
       description: Adds a subscription for the authenticated user's channel
       parameters:
         - name: part
@@ -1370,6 +1400,7 @@ paths:
     delete:
       tags: [Subscriptions]
       summary: Unsubscribe from channel
+      operationId: unsubscribeFromChannel
       description: Deletes a subscription
       parameters:
         - name: id
@@ -1389,6 +1420,7 @@ paths:
     get:
       tags: [Comments]
       summary: List comment threads
+      operationId: listCommentThreads
       description: Returns a list of comment threads that match the API request parameters
       parameters:
         - name: part
@@ -1471,6 +1503,7 @@ paths:
     get:
       tags: [Comments]
       summary: List comments
+      operationId: listComments
       description: Returns a list of comments that match the API request parameters
       parameters:
         - name: part
@@ -1526,6 +1559,7 @@ paths:
     post:
       tags: [Thumbnails]
       summary: Set video thumbnail
+      operationId: setVideoThumbnail
       description: Uploads a custom video thumbnail to YouTube and sets it for a video
       parameters:
         - name: videoId
@@ -1565,6 +1599,7 @@ paths:
     get:
       tags: [Video Categories]
       summary: List video categories
+      operationId: listVideoCategories
       description: Returns a list of categories that can be associated with YouTube videos
       parameters:
         - name: part
@@ -1606,6 +1641,7 @@ paths:
     get:
       tags: [Video Abuse Report Reasons]
       summary: List video abuse report reasons
+      operationId: listVideoAbuseReportReasons
       description: Retrieve a list of reasons that can be used to report abusive videos
       parameters:
         - name: part
@@ -1636,6 +1672,7 @@ paths:
     get:
       tags: [I18n Languages]
       summary: List supported languages
+      operationId: listSupportedLanguages
       description: Returns a list of application languages that the YouTube website supports
       parameters:
         - name: part
@@ -1666,6 +1703,7 @@ paths:
     get:
       tags: [I18n Regions]
       summary: List supported regions
+      operationId: listSupportedRegions
       description: Returns a list of content regions that the YouTube website supports
       parameters:
         - name: part
@@ -1696,6 +1734,7 @@ paths:
     get:
       tags: [Members]
       summary: List channel members
+      operationId: listChannelMembers
       description: Lists members for a channel
       parameters:
         - name: part
@@ -1745,6 +1784,7 @@ paths:
     get:
       tags: [Membership Levels]
       summary: List membership levels
+      operationId: listMembershipLevels
       description: Returns a collection of membership levels owned by the channel that authorized the API request
       parameters:
         - name: part
@@ -1769,6 +1809,7 @@ paths:
     post:
       tags: [Watermarks]
       summary: Set channel watermark
+      operationId: setChannelWatermark
       description: Uploads a watermark image to YouTube and sets it for a channel
       parameters:
         - name: channelId
@@ -1805,6 +1846,7 @@ paths:
     post:
       tags: [Watermarks]
       summary: Remove channel watermark
+      operationId: removeChannelWatermark
       description: Deletes a channel's watermark image
       parameters:
         - name: channelId

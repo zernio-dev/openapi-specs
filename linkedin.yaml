@@ -33,6 +33,7 @@ paths:
     post:
       tags: [Posts]
       summary: Create a post
+      operationId: createPost
       description: |
         Create organic or sponsored posts with various content types including text, images, videos, 
         documents, articles, carousels, polls, and multi-image posts.
@@ -113,6 +114,7 @@ paths:
     get:
       tags: [Posts]
       summary: Find posts
+      operationId: findPosts
       description: Retrieve posts by author, account, or other criteria
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -180,6 +182,7 @@ paths:
     get:
       tags: [Posts]
       summary: Get post by ID
+      operationId: getPostById
       description: Retrieve a specific post by its URN
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -215,6 +218,7 @@ paths:
     post:
       tags: [Posts]
       summary: Update post
+      operationId: updatePost
       description: Partially update a post (PATCH operation)
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -255,6 +259,7 @@ paths:
     delete:
       tags: [Posts]
       summary: Delete post
+      operationId: deletePost
       description: Delete a post by its URN
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -280,6 +285,7 @@ paths:
     get:
       tags: [Posts]
       summary: Batch get posts
+      operationId: batchGetPosts
       description: Retrieve multiple posts in a single request
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -313,6 +319,7 @@ paths:
     post:
       tags: [Media]
       summary: Initialize video upload
+      operationId: initializeVideoUpload
       description: Initialize video upload and get upload instructions
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -359,6 +366,7 @@ paths:
     get:
       tags: [Media]
       summary: Get video details
+      operationId: getVideoDetails
       description: Retrieve details of a specific video
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -388,6 +396,7 @@ paths:
     post:
       tags: [Media]
       summary: Initialize image upload
+      operationId: initializeImageUpload
       description: Initialize image upload and get upload instructions
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -432,6 +441,7 @@ paths:
     get:
       tags: [Media]
       summary: Get image details
+      operationId: getImageDetails
       description: Retrieve details of a specific image
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -461,6 +471,7 @@ paths:
     get:
       tags: [Comments]
       summary: Get comments
+      operationId: getComments
       description: Retrieve comments for a post or other content
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -497,6 +508,7 @@ paths:
     post:
       tags: [Comments]
       summary: Create comment
+      operationId: createComment
       description: Add a comment to a post or reply to another comment
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -551,6 +563,7 @@ paths:
     get:
       tags: [Reactions]
       summary: Get reactions
+      operationId: getReactions
       description: Retrieve reactions for content or check if user reacted
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -582,6 +595,7 @@ paths:
     post:
       tags: [Reactions]
       summary: Add reaction
+      operationId: addReaction
       description: Add a reaction (like, love, etc.) to content
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -609,6 +623,7 @@ paths:
     delete:
       tags: [Reactions]
       summary: Remove reaction
+      operationId: removeReaction
       description: Remove a reaction from content
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -640,6 +655,7 @@ paths:
     get:
       tags: [Social Metadata]
       summary: Get social metadata
+      operationId: getSocialMetadata
       description: Get reaction summaries, comment counts, and other social metrics
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -680,6 +696,7 @@ paths:
     post:
       tags: [Social Metadata]
       summary: Update social metadata
+      operationId: updateSocialMetadata
       description: Update social metadata settings (e.g., enable/disable comments)
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -726,6 +743,7 @@ paths:
     get:
       tags: [Organizations]
       summary: Find organizations
+      operationId: findOrganizations
       description: Find organizations by search criteria
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -768,6 +786,7 @@ paths:
     get:
       tags: [Organizations]
       summary: Get organization
+      operationId: getOrganization
       description: Get details of a specific organization
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -797,6 +816,7 @@ paths:
     get:
       tags: [Analytics]
       summary: Get organization share statistics
+      operationId: getOrganizationShareStatistics
       description: Get analytics for organization posts and shares
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -848,6 +868,7 @@ paths:
     get:
       tags: [Analytics]
       summary: Get follower statistics
+      operationId: getOrganizationFollowerStatistics
       description: Get follower analytics for an organization
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'
@@ -898,6 +919,7 @@ paths:
     get:
       tags: [People]
       summary: Get person profile
+      operationId: getPersonProfile
       description: Get the authenticated user's profile information
       parameters:
         - $ref: '#/components/parameters/LinkedinVersion'

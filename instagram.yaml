@@ -28,6 +28,7 @@ paths:
     get:
       summary: Get current user info
       description: Returns information about the current user
+      operationId: getCurrentUser
       tags: [User]
       parameters:
         - $ref: '#/components/parameters/fields_user'
@@ -43,6 +44,7 @@ paths:
     get:
       summary: Get user by ID
       description: Returns information about a specific user
+      operationId: getUserById
       tags: [User]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -60,6 +62,7 @@ paths:
     get:
       summary: Get user media
       description: Returns a list of media objects for a user
+      operationId: getUserMedia
       tags: [Media]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -84,6 +87,7 @@ paths:
     post:
       summary: Create media
       description: Creates a media object (container) for publishing
+      operationId: createMedia
       tags: [Media, Publishing]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -109,6 +113,7 @@ paths:
     get:
       summary: Get media by ID
       description: Returns information about a specific media object
+      operationId: getMediaById
       tags: [Media]
       parameters:
         - $ref: '#/components/parameters/media_id'
@@ -128,6 +133,7 @@ paths:
     post:
       summary: Publish media
       description: Publishes a media container
+      operationId: publishMedia
       tags: [Publishing]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -160,6 +166,7 @@ paths:
     get:
       summary: Get media comments
       description: Returns comments for a media object
+      operationId: getMediaComments
       tags: [Comments]
       parameters:
         - $ref: '#/components/parameters/media_id'
@@ -183,6 +190,7 @@ paths:
     post:
       summary: Create comment reply
       description: Creates a reply to a comment
+      operationId: createCommentReply
       tags: [Comments]
       parameters:
         - $ref: '#/components/parameters/media_id'
@@ -213,6 +221,7 @@ paths:
     get:
       summary: Get comment by ID
       description: Returns information about a specific comment
+      operationId: getCommentById
       tags: [Comments]
       parameters:
         - name: comment-id
@@ -231,6 +240,7 @@ paths:
     delete:
       summary: Delete comment
       description: Deletes a comment
+      operationId: deleteComment
       tags: [Comments]
       parameters:
         - name: comment-id
@@ -253,6 +263,7 @@ paths:
     get:
       summary: Get comment replies
       description: Returns replies to a comment
+      operationId: getCommentReplies
       tags: [Comments]
       parameters:
         - name: comment-id
@@ -282,6 +293,7 @@ paths:
     get:
       summary: Get user insights
       description: Returns insights for a user account
+      operationId: getUserInsights
       tags: [Insights]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -308,6 +320,7 @@ paths:
     get:
       summary: Get media insights
       description: Returns insights for a media object
+      operationId: getMediaInsights
       tags: [Insights]
       parameters:
         - $ref: '#/components/parameters/media_id'
@@ -330,6 +343,7 @@ paths:
     get:
       summary: Search hashtags
       description: Returns hashtag data
+      operationId: searchHashtags
       tags: [Hashtags]
       parameters:
         - name: user_id
@@ -360,6 +374,7 @@ paths:
     get:
       summary: Get hashtag by ID
       description: Returns information about a hashtag
+      operationId: getHashtagById
       tags: [Hashtags]
       parameters:
         - name: hashtag-id
@@ -384,6 +399,7 @@ paths:
     get:
       summary: Get recent hashtag media
       description: Returns recent media tagged with a hashtag
+      operationId: getHashtagRecentMedia
       tags: [Hashtags, Media]
       parameters:
         - name: hashtag-id
@@ -417,6 +433,7 @@ paths:
     get:
       summary: Get top hashtag media
       description: Returns top media tagged with a hashtag
+      operationId: getHashtagTopMedia
       tags: [Hashtags, Media]
       parameters:
         - name: hashtag-id
@@ -451,6 +468,7 @@ paths:
     get:
       summary: Get tagged media
       description: Returns media in which the user is tagged
+      operationId: getUserTaggedMedia
       tags: [User, Media]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -476,6 +494,7 @@ paths:
     get:
       summary: Get user stories
       description: Returns stories for a user
+      operationId: getUserStories
       tags: [Stories]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -501,6 +520,7 @@ paths:
     post:
       summary: Create media container
       description: Create a media container for publishing content
+      operationId: createMediaContainer
       tags: [Publishing]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -567,6 +587,7 @@ paths:
     get:
       summary: Get business discovery info
       description: Get basic metadata and metrics for other Instagram Business accounts
+      operationId: getBusinessDiscovery
       tags: [User]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -599,6 +620,7 @@ paths:
     get:
       summary: Get product catalogs
       description: Get product catalogs connected to the Instagram Business account
+      operationId: getProductCatalogs
       tags: [Shopping]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -624,6 +646,7 @@ paths:
     get:
       summary: Get product tags on media
       description: Get product tags applied to a media object
+      operationId: getProductTagsOnMedia
       tags: [Shopping]
       parameters:
         - $ref: '#/components/parameters/media_id'
@@ -654,6 +677,7 @@ paths:
     post:
       summary: Add product tags to media
       description: Add product tags to a media object
+      operationId: addProductTagsToMedia
       tags: [Shopping]
       parameters:
         - $ref: '#/components/parameters/media_id'
@@ -687,6 +711,7 @@ paths:
     get:
       summary: Get user mentions
       description: Get media objects where the user has been mentioned
+      operationId: getUserMentions
       tags: [User]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -713,6 +738,7 @@ paths:
     get:
       summary: Get live media
       description: Get live video objects for the user
+      operationId: getUserLiveMedia
       tags: [Media]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -739,6 +765,7 @@ paths:
     get:
       summary: Get audience insights
       description: Get demographic and behavioral audience insights
+      operationId: getAudienceInsights
       tags: [Insights]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -768,6 +795,7 @@ paths:
     get:
       summary: Get content insights
       description: Get insights about published content performance
+      operationId: getContentInsights
       tags: [Insights]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -810,6 +838,7 @@ paths:
     get:
       summary: Get comment filters
       description: Get current comment filtering settings
+      operationId: getCommentFilters
       tags: [Comments]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -831,6 +860,7 @@ paths:
     post:
       summary: Update comment filters
       description: Update comment filtering settings
+      operationId: updateCommentFilters
       tags: [Comments]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -858,6 +888,7 @@ paths:
     get:
       summary: Get webhook subscriptions
       description: Get current webhook subscriptions for the user
+      operationId: getWebhookSubscriptions
       tags: [Webhooks]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -889,6 +920,7 @@ paths:
     post:
       summary: Subscribe to webhooks
       description: Subscribe to webhook events
+      operationId: subscribeWebhooks
       tags: [Webhooks]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -926,6 +958,7 @@ paths:
     get:
       summary: Get shopping tags
       description: Get media objects with shopping tags
+      operationId: getShoppingTags
       tags: [Shopping]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -952,6 +985,7 @@ paths:
     get:
       summary: Get available catalogs
       description: Get available product catalogs for the business
+      operationId: getAvailableCatalogs
       tags: [User]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -977,6 +1011,7 @@ paths:
     get:
       summary: Get content publishing limit
       description: Get the current content publishing limit status
+      operationId: getContentPublishingLimit
       tags: [Publishing]
       parameters:
         - $ref: '#/components/parameters/user_id'
@@ -1261,6 +1296,17 @@ components:
         id:
           type: string
           description: Insight ID
+
+    InsightsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Insight'
+          description: Array of insights
+        paging:
+          $ref: '#/components/schemas/Paging'
 
     Hashtag:
       type: object

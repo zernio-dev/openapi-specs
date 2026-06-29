@@ -26,6 +26,7 @@ paths:
   /me:
     get:
       summary: Get current user
+      operationId: getCurrentUser
       description: Returns information about the current user
       tags: [User]
       parameters:
@@ -41,6 +42,7 @@ paths:
   /me/accounts:
     get:
       summary: Get user pages
+      operationId: getUserPages
       description: Returns pages managed by the current user
       tags: [Pages]
       parameters:
@@ -66,6 +68,7 @@ paths:
   /{page-id}:
     get:
       summary: Get page by ID
+      operationId: getPageById
       description: Returns information about a specific page
       tags: [Pages]
       parameters:
@@ -82,6 +85,7 @@ paths:
   /{page-id}/feed:
     get:
       summary: Get page feed
+      operationId: getPageFeed
       description: Returns posts published by the page and posts in which the page was tagged
       tags: [Posts, Pages]
       parameters:
@@ -107,6 +111,7 @@ paths:
                     $ref: '#/components/schemas/Paging'
     post:
       summary: Create page post
+      operationId: createPagePost
       description: Creates a new post on the page
       tags: [Posts, Publishing]
       parameters:
@@ -132,6 +137,7 @@ paths:
   /{page-id}/posts:
     get:
       summary: Get page posts
+      operationId: getPagePosts
       description: Returns posts published by the page
       tags: [Posts, Pages]
       parameters:
@@ -159,6 +165,7 @@ paths:
   /{page-id}/photos:
     get:
       summary: Get page photos
+      operationId: getPagePhotos
       description: Returns photos uploaded by the page
       tags: [Media, Pages]
       parameters:
@@ -182,6 +189,7 @@ paths:
                     $ref: '#/components/schemas/Paging'
     post:
       summary: Upload photo
+      operationId: uploadPagePhoto
       description: Uploads a photo to the page
       tags: [Media, Publishing]
       parameters:
@@ -228,6 +236,7 @@ paths:
   /{page-id}/videos:
     get:
       summary: Get page videos
+      operationId: getPageVideos
       description: Returns videos uploaded by the page
       tags: [Media, Pages]
       parameters:
@@ -251,6 +260,7 @@ paths:
                     $ref: '#/components/schemas/Paging'
     post:
       summary: Upload video
+      operationId: uploadPageVideo
       description: Uploads a video to the page
       tags: [Media, Publishing]
       parameters:
@@ -300,6 +310,7 @@ paths:
   /{page-id}/video_reels:
     post:
       summary: Initialize or publish a Reel
+      operationId: publishPageReel
       description: |
         Two-phase endpoint for publishing Reels to a Facebook Page.
 
@@ -419,6 +430,7 @@ paths:
   /{post-id}:
     get:
       summary: Get post by ID
+      operationId: getPostById
       description: Returns information about a specific post
       tags: [Posts]
       parameters:
@@ -433,6 +445,7 @@ paths:
                 $ref: '#/components/schemas/Post'
     delete:
       summary: Delete post
+      operationId: deletePost
       description: Deletes a post
       tags: [Posts]
       parameters:
@@ -451,6 +464,7 @@ paths:
   /{post-id}/comments:
     get:
       summary: Get post comments
+      operationId: getPostComments
       description: Returns comments on a post
       tags: [Comments]
       parameters:
@@ -488,6 +502,7 @@ paths:
                     $ref: '#/components/schemas/Paging'
     post:
       summary: Comment on post
+      operationId: createPostComment
       description: Creates a comment on a post
       tags: [Comments]
       parameters:
@@ -529,6 +544,7 @@ paths:
   /{post-id}/likes:
     get:
       summary: Get post likes
+      operationId: getPostLikes
       description: Returns users who liked a post
       tags: [Likes]
       parameters:
@@ -551,6 +567,7 @@ paths:
                     $ref: '#/components/schemas/Paging'
     post:
       summary: Like post
+      operationId: likePost
       description: Likes a post
       tags: [Likes]
       parameters:
@@ -567,6 +584,7 @@ paths:
                     type: boolean
     delete:
       summary: Unlike post
+      operationId: unlikePost
       description: Removes like from a post
       tags: [Likes]
       parameters:
@@ -586,6 +604,7 @@ paths:
   /{comment-id}:
     get:
       summary: Get comment by ID
+      operationId: getCommentById
       description: Returns information about a specific comment
       tags: [Comments]
       parameters:
@@ -600,6 +619,7 @@ paths:
                 $ref: '#/components/schemas/Comment'
     delete:
       summary: Delete comment
+      operationId: deleteComment
       description: Deletes a comment
       tags: [Comments]
       parameters:
@@ -618,6 +638,7 @@ paths:
   /{comment-id}/comments:
     get:
       summary: Get comment replies
+      operationId: getCommentReplies
       description: Returns replies to a comment
       tags: [Comments]
       parameters:
@@ -641,6 +662,7 @@ paths:
                     $ref: '#/components/schemas/Paging'
     post:
       summary: Reply to comment
+      operationId: replyToComment
       description: Creates a reply to a comment
       tags: [Comments]
       parameters:
@@ -673,6 +695,7 @@ paths:
   /{comment-id}/private_replies:
     post:
       summary: Send private reply to comment author
+      operationId: sendPrivateReplyToCommentAuthor
       description: |
         Send a private Messenger message to the author of a comment on a Page post.
         Opens a Messenger conversation between the Page and the commenter, with a
@@ -721,6 +744,7 @@ paths:
   /{page-id}/insights:
     get:
       summary: Get page insights
+      operationId: getPageInsights
       description: Returns insights for a page
       tags: [Insights, Pages]
       parameters:
@@ -753,6 +777,7 @@ paths:
   /{post-id}/insights:
     get:
       summary: Get post insights
+      operationId: getPostInsights
       description: Returns insights for a post
       tags: [Insights, Posts]
       parameters:
@@ -774,6 +799,7 @@ paths:
   /{video-id}/insights:
     get:
       summary: Get video insights
+      operationId: getVideoInsights
       description: Returns insights for a video
       tags: [Insights, Media]
       parameters:
@@ -799,6 +825,7 @@ paths:
   /{photo-id}:
     get:
       summary: Get photo by ID
+      operationId: getPhotoById
       description: Returns information about a specific photo
       tags: [Media]
       parameters:
@@ -813,6 +840,7 @@ paths:
                 $ref: '#/components/schemas/Photo'
     delete:
       summary: Delete photo
+      operationId: deletePhoto
       description: Deletes a photo
       tags: [Media]
       parameters:
@@ -831,6 +859,7 @@ paths:
   /{video-id}:
     get:
       summary: Get video by ID
+      operationId: getVideoById
       description: Returns information about a specific video
       tags: [Media]
       parameters:
@@ -845,6 +874,7 @@ paths:
                 $ref: '#/components/schemas/Video'
     delete:
       summary: Delete video
+      operationId: deleteVideo
       description: Deletes a video
       tags: [Media]
       parameters:

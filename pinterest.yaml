@@ -15,8 +15,8 @@ servers:
 paths:
   /ad_accounts:
     get:
-      operationId: ad_accounts/list
       summary: List ad accounts
+      operationId: listAdAccounts
       description: |-
         Get a list of the ad_accounts that the "operation user_account" has access to.
                 - This includes ad_accounts they own and ad_accounts that are owned by others who have granted them [Business Access](https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts).
@@ -93,8 +93,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     post:
-      operationId: ad_accounts/create
       summary: Create ad account
+      operationId: createAdAccount
       description: |-
         Create a new ad account. Different ad accounts can support different currencies, payment methods, etc.
         An ad account is needed to create campaigns, ad groups, and ads; other accounts (your employees or partners) can be assigned business access and appropriate roles to access an ad account.
@@ -165,8 +165,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}':
     get:
-      operationId: ad_accounts/get
       summary: Get ad account
+      operationId: getAdAccount
       description: Get an ad account
       parameters:
         - $ref: '#/components/parameters/AdAccountKey'
@@ -224,8 +224,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ad_groups':
     get:
-      operationId: ad_groups/list
       summary: List ad groups
+      operationId: listAdGroups
       description: |-
         List ad groups based on provided campaign IDs or ad group IDs.(campaign_ids or ad_group_ids). <p/>
         <strong>Note:</strong><p/>
@@ -278,8 +278,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     post:
-      operationId: ad_groups/create
       summary: Create ad groups
+      operationId: createAdGroups
       description: |-
         Create multiple new ad groups. All ads in a given ad group will have the same budget, bid, run dates, targeting, and placement (search, browse, other). For more information, <a href="https://help.pinterest.com/en/business/article/campaign-structure" target="_blank"> click here</a>.
         <strong>Notes:</strong>
@@ -333,8 +333,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: enabled
     patch:
-      operationId: ad_groups/update
       summary: Update ad groups
+      operationId: updateAdGroups
       description: Update multiple existing ad groups.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -371,8 +371,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ad_groups/analytics':
     get:
-      operationId: ad_groups/analytics
       summary: Get ad group analytics
+      operationId: getAdGroupAnalytics
       description: |-
         Get analytics for the specified ad groups in the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -424,8 +424,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ad_groups/targeting_analytics':
     get:
-      operationId: ad_groups_targeting_analytics/get
       summary: Get targeting analytics for ad groups
+      operationId: getTargetingAnalyticsForAdGroups
       description: |-
         Get targeting analytics for one or more ad groups.
         For the requested ad group(s) and metrics, the response will include the requested metric information
@@ -473,8 +473,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ad_groups/audience_sizing':
     post:
-      operationId: ad_groups/audience_sizing
       summary: Get audience sizing
+      operationId: getAudienceSizing
       description: |-
         Get potential audience size for an ad group with given targeting criteria. 
         Potential audience size estimates the number of people you may be able to reach per month with your campaign. 
@@ -530,8 +530,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}':
     get:
-      operationId: ad_groups/get
       summary: Get ad group
+      operationId: getAdGroup
       description: Get a specific ad group given the ad group ID.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -560,8 +560,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ad_previews':
     post:
-      operationId: ad_previews/create
       summary: Create ad preview with pin or image
+      operationId: createAdPreviewWithPinOrImage
       description: |-
         Create an ad preview given an ad account ID and either an existing organic pin ID or the URL for an image to be used to create the Pin and the ad. <p/>
         If you are creating a preview from an existing Pin, that Pin must be promotable: that is, it must have a clickthrough link and meet other requirements. (See <a href="https://help.pinterest.com/en/business/article/promoted-pins-overview" target="_blank">Ads Overview</a>.) <p/>
@@ -610,8 +610,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ads':
     get:
-      operationId: ads/list
       summary: List ads
+      operationId: listAds
       description: |-
         List ads that meet the filters provided:
           - Listed campaign ids or ad group ids or ad ids
@@ -669,8 +669,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     post:
-      operationId: ads/create
       summary: Create ads
+      operationId: createAds
       description: 'Create multiple new ads. Request must contain `ad_group_id`, `creative_type`, and the source Pin `pin_id`.'
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -706,8 +706,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: enabled
     patch:
-      operationId: ads/update
       summary: Update ads
+      operationId: updateAds
       description: Update multiple existing ads
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -744,8 +744,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ads/analytics':
     get:
-      operationId: ads/analytics
       summary: Get ad analytics
+      operationId: getAdAnalytics
       description: |-
         Get analytics for the specified ads in the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -809,8 +809,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ads_credit/discounts':
     get:
-      operationId: ads_credits_discounts/get
       summary: Get ads credit discounts
+      operationId: getAdsCreditDiscounts
       description: |-
         Returns the list of discounts applied to the account.
 
@@ -849,8 +849,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/ads_credit/redeem':
     post:
-      operationId: ads_credit/redeem
       summary: Redeem ad credits
+      operationId: redeemAdCredits
       description: |-
         Redeem ads credit on behalf of the ad account id and apply it towards billing.
 
@@ -898,8 +898,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/ads/targeting_analytics':
     get:
-      operationId: ad_targeting_analytics/get
       summary: Get targeting analytics for ads
+      operationId: getTargetingAnalyticsForAds
       description: |-
         Get targeting analytics for one or more ads. For the requested ad(s) and metrics,
         the response will include the requested metric information (e.g. SPEND_IN_DOLLAR) for the requested target type
@@ -947,8 +947,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ads/{ad_id}':
     get:
-      operationId: ads/get
       summary: Get ad
+      operationId: getAd
       description: |-
         Get a specific ad given the ad ID. If your pin is rejected, rejected_reasons will
         contain additional information from the Ad Review process.
@@ -980,8 +980,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/advertiser_defined_events':
     get:
-      operationId: advertiser_defined_events/get
       summary: Get advertiser defined events
+      operationId: getAdvertiserDefinedEvents
       description: <p>Get advertiser defined events for the given ad account.</p>
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1061,8 +1061,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/analytics':
     get:
-      operationId: ad_account/analytics
       summary: Get ad account analytics
+      operationId: getAdAccountAnalytics
       description: |-
         Get analytics for the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -1112,8 +1112,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/audience_insights':
     get:
-      operationId: audience_insights/get
       summary: Get audience insights
+      operationId: getAudienceInsights
       description: |-
         Get Audience Insights for an ad account. The response will return insights for 3 types of audiences: the
         ad account's engaged audience on Pinterest, the ad account's total audience on Pinterest and Pinterest's
@@ -1146,8 +1146,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/audiences':
     get:
-      operationId: audiences/list
       summary: List audiences
+      operationId: listAudiences
       description: Get list of audiences for the ad account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1216,8 +1216,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: audiences/create
       summary: Create audience
+      operationId: createAudience
       description: |-
         Create an audience you can use in targeting for specific ad groups. Targeting combines customer information with
         the ways users interact with Pinterest to help you reach specific groups of users; you can include or exclude
@@ -1254,8 +1254,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/audiences/{audience_id}':
     get:
-      operationId: audiences/get
       summary: Get audience
+      operationId: getAudience
       description: Get a specific audience given the audience ID.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1289,8 +1289,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     patch:
-      operationId: audiences/update
       summary: Update audience
+      operationId: updateAudience
       description: Update (edit or remove) an existing targeting audience.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1324,8 +1324,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/audiences/shared/accounts':
     get:
-      operationId: ad_accounts_audiences_shared_accounts/list
       summary: List accounts with access to an audience owned by an ad account
+      operationId: listAccountsWithAccessToAnAudienceOwnedByAnAdAccount
       description: List all ad accounts and/or businesses that have access to a specific audience. The audience must be owned by the requesting ad account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1381,6 +1381,7 @@ paths:
     patch:
       operationId: update_ad_account_to_ad_account_shared_audience
       summary: Update audience sharing between ad accounts
+      operationId: updateAudienceSharingBetweenAdAccounts
       description: 'From an ad account, share a specific audience with another ad account, or revoke access to a previously shared audience. Only the audience owner account can share the audience. The recipient ad account(s) must be in the same <a href=''https://help.pinterest.com/en/business/article/create-and-manage-accounts''>Pinterest Business Hierarchy</a> as the business owner of the ad account.<br> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1423,6 +1424,7 @@ paths:
     patch:
       operationId: update_ad_account_to_business_shared_audience
       summary: Update audience sharing from an ad account to businesses
+      operationId: updateAudienceSharingFromAnAdAccountToBusinesses
       description: 'From an ad account, share a specific audience with a business account, or revoke access to a previously shared audience. Only the audience owner account can share the audience. The recipient business account must be in the same business hierarchy as the business owner of the ad account.<br> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1463,8 +1465,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/bid_floor':
     post:
-      operationId: ad_groups_bid_floor/get
       summary: Get bid floors
+      operationId: getBidFloors
       description: |-
         List bid floors for your campaign configuration. Bid floors are given in microcurrency values based on the currency in the bid floor specification. <p/>
         <p>Microcurrency is used to track very small transactions, based on the currency set in the advertiser’s profile.</p>
@@ -1513,8 +1515,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/billing_profiles':
     get:
-      operationId: billing_profiles/get
       summary: Get billing profiles
+      operationId: getBillingProfiles
       description: |-
         Get billing profiles in the advertiser account.
 
@@ -1559,8 +1561,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/billing_invoices':
     get:
-      operationId: billing_invoices/get
       summary: Get billing invoices
+      operationId: getBillingInvoices
       description: Get billing invoices in the advertiser account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1611,8 +1613,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/billing_invoice/{billing_invoice_id}/download':
     get:
-      operationId: billing_invoice_download/get
       summary: Get download url for a billing invoice
+      operationId: getDownloadUrlForABillingInvoice
       description: Get download url for a billing invoice.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -1649,8 +1651,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/bulk/download':
     post:
-      operationId: bulk_download/create
       summary: Get advertiser entities in bulk
+      operationId: getAdvertiserEntitiesInBulk
       description: |-
         Create an asynchronous report that may include information on campaigns, ad groups, product groups, ads,
         keywords, and/or labels; can filter by campaigns. Though the entities may be active, archived, or paused,
@@ -1686,8 +1688,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/bulk/upsert':
     post:
-      operationId: bulk_upsert/create
       summary: Create/update ad entities in bulk
+      operationId: createUpdateAdEntitiesInBulk
       description: |-
         Either create or update any combination of campaigns, ad groups, product groups, ads, keywords, or labels.
         Note that this request will be processed asynchronously; the response will include a <code>request_id</code>
@@ -1723,8 +1725,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/bulk/{bulk_request_id}':
     get:
-      operationId: bulk_request/get
       summary: Download advertiser entities in bulk
+      operationId: downloadAdvertiserEntitiesInBulk
       description: |-
         Get the status of a bulk request by <code>request_id</code>, along with a download URL that will allow you to download the
         new or updated entity data (campaigns, ad groups, product groups, ads, or keywords).
@@ -1756,8 +1758,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/campaigns':
     get:
-      operationId: campaigns/list
       summary: List campaigns
+      operationId: listCampaigns
       description: |-
         Get a list of the campaigns in the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -1807,8 +1809,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     post:
-      operationId: campaigns/create
       summary: Create campaigns
+      operationId: createCampaigns
       description: |-
         Create multiple new campaigns. Every campaign has its own campaign_id and houses one or more ad groups, which contain one or more ads.
         For more, see <a href="https://help.pinterest.com/en/business/article/set-up-your-campaign/">Set up your campaign</a>. <p/>
@@ -1860,8 +1862,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: enabled
     patch:
-      operationId: campaigns/update
       summary: Update campaigns
+      operationId: updateCampaigns
       description: |-
         <p>Update multiple ad campaigns based on campaign_ids. </p>
         <p><strong>Note:</strong></p>
@@ -1913,8 +1915,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/campaigns/analytics':
     get:
-      operationId: campaigns/analytics
       summary: Get campaign analytics
+      operationId: getCampaignAnalytics
       description: |-
         Get analytics for the specified campaigns in the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -1966,8 +1968,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/campaigns/targeting_analytics':
     get:
-      operationId: campaign_targeting_analytics/get
       summary: Get targeting analytics for campaigns
+      operationId: getTargetingAnalyticsForCampaigns
       description: |-
         Get targeting analytics for one or more campaigns.
         For the requested account and metrics, the response will include the requested metric information
@@ -2015,8 +2017,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/campaigns/{campaign_id}':
     get:
-      operationId: campaigns/get
       summary: Get campaign
+      operationId: getCampaign
       description: Get a specific campaign given the campaign ID.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2045,8 +2047,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/conversion_tags':
     post:
-      operationId: conversion_tags/create
       summary: Create conversion tag
+      operationId: createConversionTag
       description: |-
         Create a conversion tag, also known as [Pinterest tag](https://help.pinterest.com/en/business/article/set-up-the-pinterest-tag), with the option to enable enhanced match.
 
@@ -2124,8 +2126,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     get:
-      operationId: conversion_tags/list
       summary: List conversion tags
+      operationId: listConversionTags
       description: List conversion tags associated with an ad account.
       parameters:
         - $ref: '#/components/parameters/query_filter_deleted'
@@ -2191,8 +2193,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/conversion_tags/ocpm_eligible':
     get:
-      operationId: ocpm_eligible_conversion_tags/get
       summary: Get Ocpm eligible conversion tags
+      operationId: getOcpmEligibleConversionTags
       description: Get Ocpm eligible conversion tag events for an ad account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2220,8 +2222,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/conversion_tags/page_visit':
     get:
-      operationId: page_visit_conversion_tags/get
       summary: Get page visit conversion tags
+      operationId: getPageVisitConversionTags
       description: Get all page visit conversion tag events for an ad account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2259,8 +2261,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/conversion_tags/{conversion_tag_id}':
     get:
-      operationId: conversion_tags/get
       summary: Get conversion tag
+      operationId: getConversionTag
       description: Get information about an existing conversion tag.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2289,8 +2291,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/customer_lists':
     post:
-      operationId: customer_lists/create
       summary: Create customer lists
+      operationId: createCustomerLists
       description: |-
         <p>Create a customer list from your records(hashed or plain-text email addresses, or hashed MAIDs or IDFAs).</p>
         <p>A customer list is one of the four types of Pinterest audiences: for more information, see <a href="https://help.pinterest.com/en/business/article/audience-targeting" target="_blank">Audience targeting</a>
@@ -2331,8 +2333,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     get:
-      operationId: customer_lists/list
       summary: Get customer lists
+      operationId: getCustomerLists
       description: |-
         <p>Get a set of customer lists including id and name based on the filters provided.</p>
         <p>(Customer lists are a type of audience.) For more information, see
@@ -2373,8 +2375,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}':
     get:
-      operationId: customer_lists/get
       summary: Get customer list
+      operationId: getCustomerList
       description: Gets a specific customer list given the customer list ID.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2402,8 +2404,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     patch:
-      operationId: customer_lists/update
       summary: Update customer list
+      operationId: updateCustomerList
       description: |-
         <p>Append or remove records to/from an existing customer list. (A customer list is one of the four types of Pinterest audiences.)</p>
         <p>When you add records to an existing customer list, the system scans the additions for existing Pinterest
@@ -2443,8 +2445,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}/uploads':
     post:
-      operationId: customer_list_uploads/create
       summary: Create customer list upload
+      operationId: createCustomerListUpload
       description: |-
         <a href="/docs/getting-started/using-beta-and-restricted-features/" target="_blank">Closed beta</a>
 
@@ -2484,8 +2486,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}/uploads/{customer_list_upload_id}':
     get:
-      operationId: customer_list_uploads/get
       summary: Get customer list upload
+      operationId: getCustomerListUpload
       description: |-
         <a href="/docs/getting-started/using-beta-and-restricted-features/" target="_blank">Closed beta</a>
         <p>Get the metadata for a given upload by its ID.</p>
@@ -2515,8 +2517,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}/uploads/{customer_list_upload_id}/run':
     post:
-      operationId: customer_list_uploads/run
       summary: Run customer list upload
+      operationId: runCustomerListUpload
       description: |-
         <a href="/docs/getting-started/using-beta-and-restricted-features/" target="_blank">Closed beta</a>
         <p>Begin processing a customer list upload.</p>
@@ -2546,8 +2548,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/events':
     post:
-      operationId: events/create
       summary: Send conversions
+      operationId: sendConversions
       description: |-
         The Pinterest API offers advertisers a way to send Pinterest their conversion information (including web conversions, in-app conversions, or even offline conversions) based on their <code>ad_account_id</code>. The request body should be a JSON object.
         - This endpoint requires an <code>access_token</code> be generated through Ads Manager. Review the <a href="/docs/api-features/conversion-overview/">Conversions Guide</a> for more details. (Note that the authorization header required is <code>Authorization: Bearer &lt;access_token&gt;</code>).
@@ -2653,8 +2655,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/msot/events':
     post:
-      operationId: msot_events/create
       summary: Send Measurement Source Of Truth (MSOT) attributed conversion events
+      operationId: sendMeasurementSourceOfTruthMsotAttributedConversionEvents
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
         <br>
@@ -2727,8 +2729,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/insights/audiences':
     get:
-      operationId: audience_insights_scope_and_type/get
       summary: Get audience insights scope and type
+      operationId: getAudienceInsightsScopeAndType
       description: 'Get the scope and type of available audiences, which along with a date, is an audience that has recently had an interaction (referred to here as a type) on pins. Interacted pins can belong to at least the most common **partner** or **Pinterest** scopes. This means that user interactions made on advertiser or partner pins will have the **partner** scope. You can also have user interactions performed in general on Pinterest with the **Pinterest** scope. In that case, you can then use the returned type and scope values together on requests to other endpoints to retrieve insight metrics for a desired audience.'
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2756,8 +2758,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/keywords':
     get:
-      operationId: keywords/get
       summary: Get keywords
+      operationId: getKeywords
       description: |-
         <p>Get a list of keywords based on the filters provided. If no filter is provided, it will default to the ad_account_id filter, which means it will only return keywords that specifically have parent_id set to the ad_account_id. Note: Keywords can have ad_account_ids, campaign_ids, and ad_group_ids set as their parent_ids. Keywords created through Ads Manager will have their parent_id set to an ad_group_id, not ad_account_id.</p>
         <p>For more information, see <a target="_blank" href="https://help.pinterest.com/en/business/article/keyword-targeting">Keyword targeting</a>.</p>
@@ -2808,8 +2810,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     post:
-      operationId: keywords/create
       summary: Create keywords
+      operationId: createKeywords
       description: |-
         <p>Create keywords for following entity types(advertiser, campaign, ad group or ad).</p> <p>For more information, see <a target="_blank" href="https://help.pinterest.com/en/business/article/keyword-targeting">Keyword targeting</a>.</p>
         <p><b>Notes:</b></p> <ul style="list-style-type: square;"> <li>Advertisers and campaigns can only be assigned keywords with excluding ('_NEGATIVE').</li> <li>All keyword match types are available for ad groups.</li> </ul> <p>For more information on match types, see <a  target="_blank" href="/docs/api-features/targeting-overview/">match type enums</a>.</p>
@@ -2844,8 +2846,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: enabled
     patch:
-      operationId: keywords/update
       summary: Update keywords
+      operationId: updateKeywords
       description: <p>Update one or more keywords' bid and archived fields.</p> <p>Archiving a keyword effectively deletes it - keywords no longer receive metrics and no longer visible within the parent entity's keywords list.</p>
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -2877,8 +2879,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/keywords/metrics':
     get:
-      operationId: country_keywords_metrics/get
       summary: Get country's keyword metrics
+      operationId: getCountrySKeywordMetrics
       description: |-
         See keyword metrics for a specified country, aggregated across all of Pinterest.
         (Definitions are available from the "Get delivery metrics definitions"
@@ -2911,8 +2913,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/labels':
     post:
-      operationId: labels/create
       summary: Create labels
+      operationId: createLabels
       description: |-
         <p>
         <a href="/docs/getting-started/using-beta-and-restricted-features/" target="blank" target="blank">Closed beta</a>
@@ -2953,8 +2955,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: enabled
     get:
-      operationId: labels/list
       summary: List labels
+      operationId: listLabels
       description: |-
         <p>
           <a href="/docs/getting-started/using-beta-and-restricted-features/" target="blank" target="blank">Closed beta</a>
@@ -3008,8 +3010,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     patch:
-      operationId: labels/update
       summary: Update labels
+      operationId: updateLabels
       description: |-
         <p>
           <a href="/docs/getting-started/using-beta-and-restricted-features/" target="blank" target="blank">Closed beta</a>
@@ -3048,8 +3050,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/lead_forms':
     get:
-      operationId: lead_forms/list
       summary: List lead forms
+      operationId: listLeadForms
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
 
@@ -3098,8 +3100,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: enabled
     post:
-      operationId: lead_forms/create
       summary: Create lead forms
+      operationId: createLeadForms
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
 
@@ -3149,8 +3151,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     patch:
-      operationId: lead_forms/update
       summary: Update lead forms
+      operationId: updateLeadForms
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
 
@@ -3201,8 +3203,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/lead_forms/{lead_form_id}':
     get:
-      operationId: lead_form/get
       summary: Get lead form by id
+      operationId: getLeadFormById
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
 
@@ -3252,8 +3254,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/lead_forms/{lead_form_id}/test':
     post:
-      operationId: lead_form_test/create
       summary: Create lead form test data
+      operationId: createLeadFormTestData
       description: |-
         Create lead form test data based on the list of answers provided as part of the body.
         - List of answers should follow the questions creation order.
@@ -3307,8 +3309,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/leads/subscriptions':
     get:
-      operationId: ad_accounts_subscriptions/get_list
       summary: Get lead ads subscriptions
+      operationId: getLeadAdsSubscriptions
       description: Get the advertiser's list of lead ads subscriptions. Only requests for the OWNER or ADMIN of the ad_account will be allowed.
       parameters:
         - $ref: '#/components/parameters/Pinterest.Lib.AdAccountId'
@@ -3375,8 +3377,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: ad_accounts_subscriptions/post
       summary: Create lead ads subscription
+      operationId: createLeadAdsSubscription
       description: |-
         Create a lead ads webhook subscription.
         Subscriptions allow Pinterest to deliver lead data from Ads Manager directly to the subscriber. Subscriptions can exist for a specific lead form or at ad account level.
@@ -3425,8 +3427,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/leads/subscriptions/{subscription_id}':
     get:
-      operationId: ad_accounts_subscriptions/get_by_id
       summary: Get lead ads subscription by ID
+      operationId: getLeadAdsSubscriptionById
       description: |-
         Get an existing lead ads webhook subscription by ID.
           - Only requests for the OWNER or ADMIN of the ad_account will be allowed.'
@@ -3486,8 +3488,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     delete:
-      operationId: ad_accounts_subscriptions/del_by_id
       summary: Delete lead ads subscription
+      operationId: deleteLeadAdsSubscription
       description: |-
         Delete an existing lead ads webhook subscription by ID.
           - Only requests for the OWNER or ADMIN of the ad_account will be allowed.'
@@ -3542,8 +3544,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/leads_export':
     post:
-      operationId: leads_export/create
       summary: Create a request to export leads collected from a lead ad
+      operationId: createARequestToExportLeadsCollectedFromALeadAd
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
 
@@ -3591,8 +3593,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/leads_export/{leads_export_id}':
     get:
-      operationId: leads_export/get
       summary: Get the lead export from the lead export create call
+      operationId: getTheLeadExportFromTheLeadExportCreateCall
       description: |-
         <strong>This feature is currently in beta and not available to all apps, if you're interested in joining the beta, please reach out to your Pinterest account manager.</strong>
 
@@ -3651,8 +3653,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/mmm_reports':
     get:
-      operationId: analytics/get_mmm_report
       summary: Get advertiser Marketing Mix Modeling (MMM) report.
+      operationId: getAdvertiserMarketingMixModelingMmmReport
       description: |-
         Get an mmm report for an ad account. This returns a URL to an mmm metrics report given a token returned from the
         create mmm report endpoint.
@@ -3689,8 +3691,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: analytics/create_mmm_report
       summary: Create a request for a Marketing Mix Modeling (MMM) report
+      operationId: createARequestForAMarketingMixModelingMmmReport
       description: |-
         This creates an asynchronous mmm report based on the given request. It returns a token that you can use to download
         the report when it is ready. NOTE: An additional limit of 5 queries per minute per advertiser applies to this endpoint while it's in beta release.
@@ -3733,8 +3735,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/order_lines':
     get:
-      operationId: order_lines/list
       summary: Get order lines
+      operationId: getOrderLines
       description: List existing order lines associated with an ad account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -3770,8 +3772,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/order_lines/{order_line_id}':
     get:
-      operationId: order_lines/get
       summary: Get order line
+      operationId: getOrderLine
       description: Get a specific existing order line associated with an ad account.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -3798,8 +3800,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/pins/analytics':
     get:
-      operationId: ad_pins/analytics
       summary: Get pins analytics
+      operationId: getPinsAnalytics
       description: |-
         Get analytics for the pins given a campaign and pins in the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -3850,8 +3852,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/product_group_promotions':
     post:
-      operationId: product_group_promotions/create
       summary: Create product group promotions
+      operationId: createProductGroupPromotions
       description: Add one or more product groups from your catalog to an existing ad group. (Product groups added to an ad group are a 'product group promotion.')
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -3883,8 +3885,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     patch:
-      operationId: product_group_promotions/update
       summary: Update product group promotions
+      operationId: updateProductGroupPromotions
       description: Update multiple existing Product Group Promotions (by product_group_id)
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -3916,8 +3918,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     get:
-      operationId: product_group_promotions/list
       summary: Get product group promotions
+      operationId: getProductGroupPromotions
       description: |-
         List existing product group promotions associated with an ad account.
 
@@ -3962,8 +3964,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/product_group_promotions/{product_group_promotion_id}':
     get:
-      operationId: product_group_promotions/get
       summary: Get a product group promotion by id
+      operationId: getAProductGroupPromotionById
       description: Get a product group promotion by id
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -3990,8 +3992,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/product_groups/analytics':
     get:
-      operationId: product_groups/analytics
       summary: Get product group analytics
+      operationId: getProductGroupAnalytics
       description: |-
         Get analytics for the specified product groups in the specified <code>ad_account_id</code>, filtered by the specified options.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -4042,8 +4044,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/promotions':
     get:
-      operationId: promotions/list
       summary: Get promotions
+      operationId: getPromotions
       description: Gets all promotions associated with an ad account ID that can be applied to an ad group. Can be either internally-saved promotions or external promotions imported from a commerce integration.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4086,8 +4088,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: promotions/create
       summary: Create promotions
+      operationId: createPromotions
       description: Create multiple new promotions.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4133,8 +4135,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     patch:
-      operationId: promotions/update
       summary: Update promotions
+      operationId: updatePromotions
       description: Update multiple promotions.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4181,8 +4183,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/promotions/{promotion_id}':
     get:
-      operationId: promotions/get
       summary: Get promotion by id
+      operationId: getPromotionById
       description: Get a promotion by its Pinterest-specific id. It must be associated with the provided ad account id.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4217,8 +4219,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     delete:
-      operationId: promotions/delete
       summary: Delete promotion by id
+      operationId: deletePromotionById
       description: Delete a promotion within Pinterest.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4241,8 +4243,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/reports':
     get:
-      operationId: analytics/get_report
       summary: Get the account analytics report created by the async call
+      operationId: getTheAccountAnalyticsReportCreatedByTheAsyncCall
       description: |-
         This returns a URL to an analytics report given a token returned from the post request report creation call. You can use the URL to download the report. The link is valid for five minutes and the report is valid for one hour.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -4279,8 +4281,8 @@ paths:
       x-ratelimit-category: ads_analytics
       x-sandbox: disabled
     post:
-      operationId: analytics/create_report
       summary: Create async request for an account analytics report
+      operationId: createAsyncRequestForAnAccountAnalyticsReport
       description: |-
         This returns a token that you can use to download the report when it is ready. Note that this endpoint requires the parameters to be passed as JSON-formatted in the request body. This endpoint does not support URL query parameters.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Analyst, Campaign Manager.
@@ -4327,8 +4329,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/reports/brand_category_sku':
     get:
-      operationId: analytics/get_conversion_product_report
       summary: 'Get advertiser brand, category, SKU report'
+      operationId: getAdvertiserBrandCategorySkuReport
       description: |-
         <a href="/docs/getting-started/using-beta-and-restricted-features/" target="blank" target="blank">Restricted</a>
         Get a brand, category, SKU report for an ad account. This call returns the URL for the report that matches the token returned in the request to the Create brand, category, SKU report endpoint.
@@ -4365,8 +4367,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: analytics/create_conversion_product_report
       summary: 'Create a request for a brand, category, SKU report'
+      operationId: createARequestForABrandCategorySkuReport
       description: |-
         <a href="/docs/getting-started/using-beta-and-restricted-features/" target="blank" target="blank">Restricted</a>
         This creates an asynchronous brand, category, SKU report based on the given request. This request returns a token that you can use to download the report when it is ready.
@@ -4409,8 +4411,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/sandbox':
     delete:
-      operationId: sandbox/delete
       summary: Delete ads data for ad account in API Sandbox
+      operationId: deleteAdsDataForAdAccountInApiSandbox
       description: |-
         Delete an ad account and all the ads data associated with that account.
         A string message is returned indicating the status of the delete operation.
@@ -4451,8 +4453,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ssio/accounts':
     get:
-      operationId: ssio_accounts/get
       summary: Get Salesforce account details including bill-to information.
+      operationId: getSalesforceAccountDetailsIncludingBillToInformation
       description: |-
         Get Salesforce account details including bill-to information to be used in insertion orders process for <code>ad_account_id</code>.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Finance, Campaign.
@@ -4489,8 +4491,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ssio/insertion_orders':
     post:
-      operationId: ssio_insertion_order/create
       summary: Create insertion order through SSIO.
+      operationId: createInsertionOrderThroughSsio
       description: |-
         Create insertion order through SSIO for <code>ad_account_id</code>.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Finance, Campaign.
@@ -4533,8 +4535,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: enabled
     patch:
-      operationId: ssio_insertion_order/edit
       summary: Edit insertion order through SSIO.
+      operationId: editInsertionOrderThroughSsio
       description: |-
         Edit insertion order through SSIO for <code>ad_account_id</code>.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Finance, Campaign.
@@ -4578,8 +4580,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ssio/insertion_orders/status':
     get:
-      operationId: ssio_insertion_orders_status/get_by_ad_account
       summary: Get insertion order status by ad account id.
+      operationId: getInsertionOrderStatusByAdAccountId
       description: |-
         Get insertion order status for account id <code>ad_account_id</code>.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Finance, Campaign.
@@ -4625,8 +4627,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ssio/insertion_orders/{pin_order_id}/status':
     get:
-      operationId: ssio_insertion_orders_status/get_by_pin_order_id
       summary: Get insertion order status by pin order id.
+      operationId: getInsertionOrderStatusByPinOrderId
       description: |-
         Get insertion order status for pin order id <code>pin_order_id</code>.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Finance, Campaign.
@@ -4664,8 +4666,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/ssio/order_lines':
     get:
-      operationId: ssio_order_lines/get_by_ad_account
       summary: Get Salesforce order lines by ad account id.
+      operationId: getSalesforceOrderLinesByAdAccountId
       description: |-
         Get Salesforce order lines for account id <code>ad_account_id</code>.
         - The token's user_account must either be the Owner of the specified ad account, or have one of the necessary roles granted to them via <a href="https://help.pinterest.com/en/business/article/share-and-manage-access-to-your-ad-accounts">Business Access</a>: Admin, Finance, Campaign.
@@ -4712,8 +4714,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/targeting_analytics':
     get:
-      operationId: ad_account_targeting_analytics/get
       summary: Get targeting analytics for an ad account
+      operationId: getTargetingAnalyticsForAnAdAccount
       description: |-
         Get targeting analytics for an ad account.
         For the requested account and metrics, the response will include the requested metric information
@@ -4760,8 +4762,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/targeting_templates':
     get:
-      operationId: targeting_template/list
       summary: List targeting templates
+      operationId: listTargetingTemplates
       description: Get a list of the targeting templates in the specified <code>ad_account_id</code>
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4821,8 +4823,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: targeting_template/create
       summary: Create targeting templates
+      operationId: createTargetingTemplates
       description: |-
         <p>Targeting templates allow advertisers to save a set of targeting details including audience lists,
          keywords & interest, demographics, and placements to use more than once during the campaign creation process.</p>
@@ -4867,8 +4869,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     patch:
-      operationId: targeting_template/update
       summary: Update targeting templates
+      operationId: updateTargetingTemplates
       description: <p>Update the targeting template given advertiser ID and targeting template ID</p>
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4906,8 +4908,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/templates':
     get:
-      operationId: templates/list
       summary: List templates
+      operationId: listTemplates
       description: Gets all Templates associated with an ad account ID.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -4952,8 +4954,8 @@ paths:
       x-sandbox: enabled
   '/ad_accounts/{ad_account_id}/templates/{template_id}/reports':
     post:
-      operationId: analytics/create_template_report
       summary: Create async request for an analytics report using a template
+      operationId: createAsyncRequestForAnAnalyticsReportUsingATemplate
       description: |2-
 
 
@@ -5024,8 +5026,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/terms_of_service':
     get:
-      operationId: terms_of_service/get
       summary: Get terms of service
+      operationId: getTermsOfService
       description: Get the text of the terms of service and see whether the advertiser has accepted the terms of service.
       parameters:
         - $ref: '#/components/parameters/path_ad_account_id'
@@ -5053,8 +5055,8 @@ paths:
       x-sandbox: enabled
   /advanced_auction/items/get:
     post:
-      operationId: advanced_auction_items_get/post
       summary: Get item bid options (POST)
+      operationId: getItemBidOptionsPost
       description: |-
         Get the bid options for a batch of retail catalog items.
 
@@ -5129,8 +5131,8 @@ paths:
       x-sandbox: enabled
   /advanced_auction/items/submit:
     post:
-      operationId: advanced_auction_items_submit/post
       summary: Operate on item level bid options
+      operationId: operateOnItemLevelBidOptions
       description: |-
         This endpoint supports multiple operations on a set of one or more bid options (bid price and bid adjustments for targeting categories) for retail catalog items. These advanced auction settings are applied in campaigns using objective_type `CATALOG_SALES` and ad groups using bid_strategy_type `MAX_BID`.
 
@@ -5211,8 +5213,8 @@ paths:
       x-sandbox: enabled
   /boards:
     post:
-      operationId: boards/create
       summary: Create board
+      operationId: createBoard
       description: |-
         Create a board owned by the "operation user_account".
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5286,8 +5288,8 @@ paths:
       x-ratelimit-category: org_write
       x-sandbox: enabled
     get:
-      operationId: boards/list
       summary: List boards
+      operationId: listBoards
       description: |-
         Get a list of the boards owned by the "operation user_account" + group boards where this account is a collaborator
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5362,8 +5364,8 @@ paths:
       x-sandbox: enabled
   '/boards/{board_id}':
     get:
-      operationId: boards/get
       summary: Get board
+      operationId: getBoard
       description: |-
         Get a board owned by the operation user_account - or a group board that has been shared with this account.
         * Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5424,8 +5426,8 @@ paths:
       x-ratelimit-category: org_read
       x-sandbox: enabled
     delete:
-      operationId: boards/delete
       summary: Delete board
+      operationId: deleteBoard
       description: |-
         Delete a board owned by the "operation user_account".
         * Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5481,8 +5483,8 @@ paths:
       x-ratelimit-category: org_write
       x-sandbox: enabled
     patch:
-      operationId: boards/update
       summary: Update board
+      operationId: updateBoard
       description: |-
         Update a board owned by the "operating user_account".
         * Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5552,8 +5554,8 @@ paths:
       x-sandbox: enabled
   '/boards/{board_id}/pins':
     get:
-      operationId: boards/list_pins
       summary: List Pins on board
+      operationId: listPinsOnBoard
       description: |-
         Get a list of the Pins on a board owned by the "operation user_account" - or on a group board that has been shared with this account.
         - Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5607,8 +5609,8 @@ paths:
       x-sandbox: enabled
   '/boards/{board_id}/sections':
     get:
-      operationId: board_sections/list
       summary: List board sections
+      operationId: listBoardSections
       description: |-
         Get a list of all board sections from a board owned by the "operation user_account" - or a group board that has been shared with this account.
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5648,8 +5650,8 @@ paths:
       x-ratelimit-category: org_read
       x-sandbox: enabled
     post:
-      operationId: board_sections/create
       summary: Create board section
+      operationId: createBoardSection
       description: |-
         Create a board section on a board owned by the "operation user_account" - or on a group board that has been shared with this account.
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5723,8 +5725,8 @@ paths:
       x-sandbox: enabled
   '/boards/{board_id}/sections/{section_id}':
     patch:
-      operationId: board_sections/update
       summary: Update board section
+      operationId: updateBoardSection
       description: |-
         Update a board section on a board owned by the "operation user_account" - or on a group board that has been shared with this account.
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5789,8 +5791,8 @@ paths:
       x-ratelimit-category: org_write
       x-sandbox: enabled
     delete:
-      operationId: board_sections/delete
       summary: Delete board section
+      operationId: deleteBoardSection
       description: |-
         Delete a board section on a board owned by the "operation user_account" - or on a group board that has been shared with this account.
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5845,8 +5847,8 @@ paths:
       x-sandbox: enabled
   '/boards/{board_id}/sections/{section_id}/pins':
     get:
-      operationId: board_sections/list_pins
       summary: List Pins on board section
+      operationId: listPinsOnBoardSection
       description: |-
         Get a list of the Pins on a board section of a board owned by the "operation user_account" - or on a group board that has been shared with this account.
         Optional: Business Access: Specify an ad_account_id to use the owner of that ad_account as the "operation user_account".
@@ -5917,8 +5919,8 @@ paths:
       x-sandbox: enabled
   /businesses/employers:
     get:
-      operationId: get/business_employers
       summary: List business employers for user
+      operationId: listBusinessEmployersForUser
       description: Get all of the viewing user's business employers.
       parameters:
         - $ref: '#/components/parameters/query_page_size'
@@ -5955,6 +5957,7 @@ paths:
     patch:
       operationId: respond_business_access_invites
       summary: Accept or decline an invite/request
+      operationId: acceptOrDeclineAnInviteRequest
       description: Accept or decline invites or requests.
       requestBody:
         required: true
@@ -5985,8 +5988,8 @@ paths:
       x-sandbox: enabled
   '/businesses/{business_id}/system_users/{system_user_id}':
     patch:
-      operationId: system_user/update
       summary: Update a system user information.
+      operationId: updateASystemUserInformation
       description: Update a system user information such as name.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -6041,8 +6044,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/assets/{asset_id}/members':
     get:
-      operationId: business_asset_members/get
       summary: Get members with access to asset
+      operationId: getMembersWithAccessToAsset
       description: Get all the members the requesting business has granted access to on the given asset.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -6081,8 +6084,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/assets/{asset_id}/partners':
     get:
-      operationId: business_asset_partners/get
       summary: Get partners with access to asset
+      operationId: getPartnersWithAccessToAsset
       description: |-
         Get all the partners the requesting business has granted access to on the given asset.
         Note: If the asset has been shared with you, an empty array will be returned. This is because an asset shared with
@@ -6125,6 +6128,7 @@ paths:
     post:
       operationId: create_asset_invites
       summary: Update invite/request with an asset permission
+      operationId: updateInviteRequestWithAnAssetPermission
       description: |-
         Assign asset permissions information to an existing invite/request. Can be used to:
         - Request access to a partner's asset. Note: This is only for when no existing partnership exists. If an existing
@@ -6174,8 +6178,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/requests/assets/access':
     post:
-      operationId: asset_access_requests/create
       summary: Create a request to access an existing partner's assets.
+      operationId: createARequestToAccessAnExistingPartnerSAssets
       description: Create a request to access an existing partner's assets with the specified permissions. The request will be sent to the partner for approval. The assets that can be requested are ad accounts and profiles.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -6208,8 +6212,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/members':
     get:
-      operationId: get/business_members
       summary: Get business members
+      operationId: getBusinessMembers
       description: |-
         Get all members of the specified business.
         The return response will include the member's business_role and assets they have access to if assets_summary=TRUE
@@ -6265,8 +6269,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     patch:
-      operationId: update/business_memberships
       summary: Update member's business role
+      operationId: updateMemberSBusinessRole
       description: Update a member's business role within the business.
       parameters:
         - $ref: '#/components/parameters/path_business_id'
@@ -6303,6 +6307,7 @@ paths:
     delete:
       operationId: delete_business_membership
       summary: Terminate business memberships
+      operationId: terminateBusinessMemberships
       description: Terminate memberships between the specified members and your business.
       parameters:
         - $ref: '#/components/parameters/path_business_id'
@@ -6336,8 +6341,8 @@ paths:
       x-sandbox: enabled
   '/businesses/{business_id}/assets':
     get:
-      operationId: business_assets/get
       summary: List business assets
+      operationId: listBusinessAssets
       description: Get all the assets the requesting business has access to. This includes assets the business owns and assets the business has access to through partnerships.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -6403,8 +6408,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/members/{member_id}/assets':
     get:
-      operationId: business_member_assets/get
       summary: Get assets assigned to a member
+      operationId: getAssetsAssignedToAMember
       description: |-
         Get assets on which you assigned asset permissions to the given member. Can be used to:
         - get all assets, regardless of asset type or
@@ -6447,8 +6452,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/members/assets/access':
     patch:
-      operationId: business_members_asset_access/update
       summary: Assign/Update member asset permissions
+      operationId: assignUpdateMemberAssetPermissions
       description: |
         Grant multiple members access to assets and/or update multiple member's exisiting permissions to an asset.
         Note: Not all listed permissions are applicable to each asset type. For example, PROFILE_PUBLISHER would not be applicable to an asset of type AD_ACCOUNT. The permission level PROFILE_PUBLISHER is only available to an asset of the type PROFILE.
@@ -6482,8 +6487,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     delete:
-      operationId: business_members_asset_access/delete
       summary: Delete member access to asset
+      operationId: deleteMemberAccessToAsset
       description: Terminate multiple members' access to an asset.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -6542,8 +6547,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/invites':
     get:
-      operationId: get/invites
       summary: Get invites/requests
+      operationId: getInvitesRequests
       description: Get the membership/partnership invites and/or requests for the authorized user.
       parameters:
         - $ref: '#/components/parameters/path_non_system_business_user'
@@ -6583,6 +6588,7 @@ paths:
     post:
       operationId: create_membership_or_partnership_invites
       summary: Create invites or requests
+      operationId: createInvitesOrRequests
       description: |-
         Create batch invites or requests. Can create batch invites or requests as described below.
         - Invite members to join the business. This would required specifying the following:
@@ -6630,6 +6636,7 @@ paths:
     delete:
       operationId: cancel_invites_or_requests
       summary: Cancel invites/requests
+      operationId: cancelInvitesRequests
       description: Cancel membership/partnership invites and/or requests.
       parameters:
         - $ref: '#/components/parameters/path_non_system_business_user'
@@ -6664,6 +6671,7 @@ paths:
     patch:
       operationId: update_partner_asset_access_handler_impl
       summary: Assign/Update partner asset permissions
+      operationId: assignUpdatePartnerAssetPermissions
       description: |-
         Grant multiple partners access to assets and/or update multiple partner's exisiting permissions to an asset.
         If your partner already had permissions on the asset, they will be overriden with the new permissions you assign to them.
@@ -6704,6 +6712,7 @@ paths:
     delete:
       operationId: delete_partner_asset_access_handler_impl
       summary: Delete partner access to asset
+      operationId: deletePartnerAccessToAsset
       description: |-
         Terminate multiple partners' access to an asset. If
         - partner_type=INTERNAL: You will terminate a partner's asset access to your business assets.
@@ -6738,8 +6747,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/partners/{partner_id}/assets':
     get:
-      operationId: business_partner_asset_access/get
       summary: Get assets assigned to a partner or assets assigned by a partner
+      operationId: getAssetsAssignedToAPartnerOrAssetsAssignedByAPartner
       description: |-
         Can be used to get the business assets your partner has granted you access to or the business assets you have
         granted your partner access to. If you specify:
@@ -6794,8 +6803,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/partners':
     get:
-      operationId: get/business_partners
       summary: Get business partners
+      operationId: getBusinessPartners
       description: |-
         Get all partners of the specified business.
 
@@ -6849,6 +6858,7 @@ paths:
     delete:
       operationId: delete_business_partners
       summary: Terminate business partnerships
+      operationId: terminateBusinessPartnerships
       description: |-
         Terminate partnerships between the specified partners and your business.
         Note: You may only batch terminate partners of the same partner type.
@@ -6890,8 +6900,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/audiences':
     get:
-      operationId: shared_audiences_for_business/list
       summary: List received audiences for a business
+      operationId: listReceivedAudiencesForABusiness
       description: Get a list of received audiences for the given business.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -6936,8 +6946,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/audiences/shared/accounts':
     get:
-      operationId: business_account_audiences_shared_accounts/list
       summary: List accounts with access to an audience owned by a business
+      operationId: listAccountsWithAccessToAnAudienceOwnedByABusiness
       description: |-
         List all ad accounts and/or businesses that have access to a specific audience.
         The audience must either be owned by an ad account in the requesting business, or it must have been shared with the requesting business.
@@ -6994,6 +7004,7 @@ paths:
     patch:
       operationId: update_business_to_ad_account_shared_audience
       summary: Update audience sharing from a business to ad accounts
+      operationId: updateAudienceSharingFromABusinessToAdAccounts
       description: 'From a business, share a specific audience with other ad account(s), or revoke access to a previously shared audience. <ul> <li>If the business is the owner of the audience, it can share with any ad account within the same business hierarchy.</li> <li>If the business is the recipient of the audience, it can share with any of its owned ad accounts.</li> </ul> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -7036,6 +7047,7 @@ paths:
     patch:
       operationId: update_business_to_business_shared_audience
       summary: Update audience sharing between businesses
+      operationId: updateAudienceSharingBetweenBusinesses
       description: 'From a business, share a specific audience with another business account, or revoke access to a previously shared audience. Only the audience owner can share the audience with other businesses, and the recipient business must be within the same business hierarchy.<br> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -7076,8 +7088,8 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/asset_groups':
     post:
-      operationId: asset_group/create
       summary: Create a new asset group.
+      operationId: createANewAssetGroup
       description: |-
         Create a new asset group with the specified parameters.
         - An <a href="https://help.pinterest.com/en/business/article/asset-groups">asset group</a> is a custom group of assets based on how you’d like to manage your accounts.
@@ -7120,8 +7132,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     patch:
-      operationId: asset_group/update
       summary: Update asset groups.
+      operationId: updateAssetGroups
       description: Update a batch of asset groups with the specified parameters.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -7162,8 +7174,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     delete:
-      operationId: asset_group/delete
       summary: Delete asset groups.
+      operationId: deleteAssetGroups
       description: Delete a batch of asset groups.
       parameters:
         - $ref: '#/components/parameters/path_business_user'
@@ -7205,8 +7217,8 @@ paths:
       x-sandbox: disabled
   '/business_access/business_hierarchy/{business_hierarchy_id}/brand_accounts':
     post:
-      operationId: brand_accounts/create
       summary: Create a Brand Account
+      operationId: createABrandAccount
       description: 'Create a Brand Account that will be a child business of a business hierarchy. Request must contain name, username, and country.'
       parameters:
         - $ref: '#/components/parameters/path_business_hierarchy_id'
@@ -7292,8 +7304,8 @@ paths:
       x-sandbox: disabled
   '/business_access/business_hierarchy/{business_hierarchy_id}/brand_accounts/{brand_account_id}':
     patch:
-      operationId: brand_accounts/update
       summary: Update a Brand Account
+      operationId: updateABrandAccount
       description: Update an existing Brand Account
       parameters:
         - $ref: '#/components/parameters/path_business_hierarchy_id'
@@ -7433,8 +7445,8 @@ paths:
       x-sandbox: disabled
   /catalogs:
     get:
-      operationId: catalogs/list
       summary: List catalogs
+      operationId: listCatalogs
       description: |-
         Fetch catalogs owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -7496,8 +7508,8 @@ paths:
       x-ratelimit-category: catalogs_read
       x-sandbox: enabled
     post:
-      operationId: catalogs/create
       summary: Create catalog
+      operationId: createCatalog
       description: |-
         Create a new catalog owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -7561,8 +7573,8 @@ paths:
       x-sandbox: enabled
   /catalogs/available_filter_values:
     get:
-      operationId: catalogs/available_filter_values
       summary: List available filter values
+      operationId: listAvailableFilterValues
       description: |-
         Get the available filter attributes and values associated with a given feed or catalog owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -7672,8 +7684,8 @@ paths:
       x-sandbox: enabled
   /catalogs/feeds:
     get:
-      operationId: feeds/list
       summary: List feeds
+      operationId: listFeeds
       description: |-
         Fetch feeds owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -7738,8 +7750,8 @@ paths:
       x-ratelimit-category: catalogs_read
       x-sandbox: enabled
     post:
-      operationId: feeds/create
       summary: Create feed
+      operationId: createFeed
       description: |-
         Create a new feed owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -7865,8 +7877,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/feeds/{feed_id}':
     get:
-      operationId: feeds/get
       summary: Get feed
+      operationId: getFeed
       description: |-
         Get a single feed owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -7933,8 +7945,8 @@ paths:
       x-ratelimit-category: catalogs_read
       x-sandbox: enabled
     patch:
-      operationId: feeds/update
       summary: Update feed
+      operationId: updateFeed
       description: |-
         Update a feed owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -8019,8 +8031,8 @@ paths:
       x-ratelimit-category: catalogs_write
       x-sandbox: enabled
     delete:
-      operationId: feeds/delete
       summary: Delete feed
+      operationId: deleteFeed
       description: |-
         Delete a feed owned by the "operating user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -8101,8 +8113,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/feeds/{feed_id}/ingest':
     post:
-      operationId: feeds/ingest
       summary: Ingest feed items
+      operationId: ingestFeedItems
       description: |-
         Ingest items for a given feed owned by the "operation user_account".
 
@@ -8173,8 +8185,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/feeds/{feed_id}/processing_results':
     get:
-      operationId: feed_processing_results/list
       summary: List feed processing results
+      operationId: listFeedProcessingResults
       description: |-
         Fetch a feed processing results owned by the "operation user_account". Please note that for now the bookmark parameter is not functional and only the first page will be available until it is implemented in some release in the near future.
         - By default, the "operation user_account" is the token user_account.
@@ -8249,8 +8261,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/processing_results/{processing_result_id}/item_issues':
     get:
-      operationId: items_issues/list
       summary: List item issues
+      operationId: listItemIssues
       description: |-
         List item validation issues for a given feed processing result owned by the "operation user_account". Up to 20 random samples of affected items are returned for each error and warning code. Please note that for now query parameters 'item_numbers' and 'item_validation_issue' cannot be used simultaneously until it is implemented in some release in the future.
         - By default, the "operation user_account" is the token user_account.
@@ -8329,8 +8341,8 @@ paths:
       x-sandbox: enabled
   /catalogs/items:
     post:
-      operationId: items/post
       summary: Get catalogs items (POST)
+      operationId: getCatalogsItemsPost
       description: |-
         Get the items of the catalog owned by the "operation user_account". <a href="/docs/api-features/shopping-overview/#Update%20items%20in%20batch" target="_blank">See detailed documentation here.</a>
         - By default, the "operation user_account" is the token user_account.
@@ -8398,8 +8410,8 @@ paths:
       x-sandbox: enabled
   /catalogs/items/batch:
     post:
-      operationId: items_batch/post
       summary: Operate on item batch
+      operationId: operateOnItemBatch
       description: |-
         This endpoint supports multiple operations on a set of one or more catalog items owned by the "operation user_account". <a href="/docs/api-features/shopping-overview/#Update%20items%20in%20batch" target="_blank">See detailed documentation here.</a>
         - By default, the "operation user_account" is the token user_account.
@@ -8475,8 +8487,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/items/batch/{batch_id}':
     get:
-      operationId: items_batch/get
       summary: Get item batch status
+      operationId: getItemBatchStatus
       description: |-
         Get a single catalogs items batch owned by the "operating user_account". <a href="/docs/api-features/shopping-overview/#Update%20items%20in%20batch" target="_blank">See detailed documentation here.</a>
         - By default, the "operation user_account" is the token user_account.
@@ -8551,8 +8563,8 @@ paths:
       x-sandbox: enabled
   /catalogs/product_groups/multiple:
     delete:
-      operationId: catalogs_product_groups/delete_many
       summary: Delete product groups
+      operationId: deleteProductGroups
       description: |-
         Delete product groups owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -8636,8 +8648,8 @@ paths:
       x-ratelimit-category: catalogs_write
       x-sandbox: enabled
     post:
-      operationId: catalogs_product_groups/create_many
       summary: Create product groups
+      operationId: createProductGroups
       description: |-
         Create product group to use in Catalogs owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -8667,6 +8679,8 @@ paths:
             examples:
               RetailFewFiltersUsingAllOf:
                 summary: A simple retail example that applies "all of the following filters".
+                operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
+                operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a product to be included in the Product Group.
@@ -8685,6 +8699,8 @@ paths:
                               - Luxury Items
               RetailManyFiltersUsingAnyOf:
                 summary: A more complete retail example that applies "any of the following filters".
+                operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
+                operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
                 description: |
                   The use of "any_of" creates a Product Group where any of the individual filters
                   can add products to the Product Group independently.
@@ -8774,6 +8790,8 @@ paths:
                             negated: false
               CatalogBasedRetailFewFiltersUsingAllOf:
                 summary: A simple catalog based retail example that applies "all of the following filters".
+                operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
+                operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a retail to be included in the Product Group.
@@ -8795,6 +8813,8 @@ paths:
                             negated: false
               HotelFewFiltersUsingAllOf:
                 summary: A simple hotel example that applies "all of the following filters".
+                operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
+                operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a hotel to be included in the Product Group.
@@ -8907,8 +8927,8 @@ paths:
       x-sandbox: enabled
   /catalogs/product_groups:
     get:
-      operationId: catalogs_product_groups/list
       summary: List product groups
+      operationId: listProductGroups
       description: |-
         Get a list of product groups for a given Catalogs Feed Id owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -9010,8 +9030,8 @@ paths:
       x-ratelimit-category: catalogs_read
       x-sandbox: enabled
     post:
-      operationId: catalogs_product_groups/create
       summary: Create product group
+      operationId: createProductGroup
       description: |-
         Create product group to use in Catalogs owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -9036,6 +9056,8 @@ paths:
             examples:
               RetailFewFiltersUsingAllOf:
                 summary: A simple retail example that applies "all of the following filters".
+                operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
+                operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a product to be included in the Product Group.
@@ -9054,6 +9076,8 @@ paths:
                             - Luxury Items
               RetailManyFiltersUsingAnyOf:
                 summary: A more complete retail example that applies "any of the following filters".
+                operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
+                operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
                 description: |
                   The use of "any_of" creates a Product Group where any of the individual filters
                   can add products to the Product Group independently.
@@ -9143,6 +9167,8 @@ paths:
                           negated: false
               HotelFewFiltersUsingAllOf:
                 summary: A simple hotel example that applies "all of the following filters".
+                operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
+                operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a hotel to be included in the Product Group.
@@ -9162,6 +9188,8 @@ paths:
                           negated: false
               CatalogBasedRetailFewFiltersUsingAllOf:
                 summary: A simple catalog based retail example that applies "all of the following filters".
+                operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
+                operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a retail to be included in the Product Group.
@@ -9271,8 +9299,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/product_groups/{product_group_id}':
     get:
-      operationId: catalogs_product_groups/get
       summary: Get product group
+      operationId: getProductGroup
       description: |-
         Get a singe product group for a given Catalogs Product Group Id owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -9363,8 +9391,8 @@ paths:
       x-ratelimit-category: catalogs_read
       x-sandbox: enabled
     delete:
-      operationId: catalogs_product_groups/delete
       summary: Delete product group
+      operationId: deleteProductGroup
       description: |-
         Delete a product group owned by the "operation user_account" from being in use in Catalogs.
         - By default, the "operation user_account" is the token user_account.
@@ -9459,8 +9487,8 @@ paths:
       x-ratelimit-category: catalogs_write
       x-sandbox: enabled
     patch:
-      operationId: catalogs_product_groups/update
       summary: Update single product group
+      operationId: updateSingleProductGroup
       description: |-
         Update product group owned by the "operation user_account" to use in Catalogs.
         - By default, the "operation user_account" is the token user_account.
@@ -9584,8 +9612,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/product_groups/{product_group_id}/product_counts':
     get:
-      operationId: catalogs_product_groups/product_counts_get
       summary: Get product counts
+      operationId: getProductCounts
       description: |-
         Get a product counts for a given Catalogs Product Group owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -9640,8 +9668,8 @@ paths:
       x-sandbox: enabled
   '/catalogs/product_groups/{product_group_id}/products':
     get:
-      operationId: catalogs_product_group_pins/list
       summary: List products by product group
+      operationId: listProductsByProductGroup
       description: |-
         Get a list of product pins for a given Catalogs Product Group Id owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -9719,8 +9747,8 @@ paths:
       x-sandbox: enabled
   /catalogs/products/get_by_product_group_filters:
     post:
-      operationId: products_by_product_group_filter/list
       summary: List products by filter
+      operationId: listProductsByFilter
       description: |-
         List products Pins owned by the "operation user_account" that meet the criteria specified in the Catalogs Product Group Filter given in the request.
         - This endpoint has been implemented in POST to allow for complex filters. This specific POST endpoint is designed to be idempotent.
@@ -9800,8 +9828,8 @@ paths:
       x-sandbox: enabled
   /catalogs/reports:
     post:
-      operationId: reports/create
       summary: Build catalogs report
+      operationId: buildCatalogsReport
       description: |-
         Async request to create a report of the catalog owned by the "operation user_account". This endpoint generates a report upon receiving the first approved request of the day. Any following requests with identical parameters will yield the same report even if data has changed.
         - By default, the "operation user_account" is the token user_account.
@@ -9870,8 +9898,8 @@ paths:
       x-ratelimit-category: catalogs_read
       x-sandbox: disabled
     get:
-      operationId: reports/get
       summary: Get catalogs report
+      operationId: getCatalogsReport
       description: |-
         This returns a URL to a report given a token returned from <a href='/docs/api/v5/#operation/reports/create'>Build catalogs report</a>. You can use the URL to download the report.
         - By default, the "operation user_account" is the token user_account.
@@ -9924,8 +9952,8 @@ paths:
       x-sandbox: disabled
   /catalogs/reports/stats:
     get:
-      operationId: reports/stats
       summary: List report stats
+      operationId: listReportStats
       description: |-
         List aggregated numbers of issues for a catalog owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -9976,8 +10004,8 @@ paths:
       x-sandbox: disabled
   /integrations/commerce:
     post:
-      operationId: integrations_commerce/post
       summary: Create commerce integration
+      operationId: createCommerceIntegration
       description: |-
         Create commerce integration metadata to link an external business ID with a Pinterest merchant & ad account.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10032,8 +10060,8 @@ paths:
       x-sandbox: disabled
   '/integrations/commerce/{external_business_id}':
     get:
-      operationId: integrations_commerce/get
       summary: Get commerce integration
+      operationId: getCommerceIntegration
       description: |-
         Get commerce integration metadata associated with the given external business ID.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10082,8 +10110,8 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     patch:
-      operationId: integrations_commerce/patch
       summary: Update commerce integration
+      operationId: updateCommerceIntegration
       description: |-
         Update commerce integration metadata for the given external business ID.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10139,8 +10167,8 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     delete:
-      operationId: integrations_commerce/del
       summary: Delete commerce integration
+      operationId: deleteCommerceIntegration
       description: |-
         Delete commerce integration metadata for the given external business ID.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10164,8 +10192,8 @@ paths:
       x-sandbox: disabled
   /integrations/logs:
     post:
-      operationId: integrations_logs/post
       summary: Receives batched logs from integration applications.
+      operationId: receivesBatchedLogsFromIntegrationApplications
       description: |-
         This endpoint receives batched logs from integration applications on partner platforms.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10206,8 +10234,8 @@ paths:
       x-sandbox: enabled
   /integrations:
     get:
-      operationId: integrations/get_list
       summary: Get integration metadata list
+      operationId: getIntegrationMetadataList
       description: |-
         Get integration metadata list.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10243,8 +10271,8 @@ paths:
       x-sandbox: disabled
   '/integrations/{id}':
     get:
-      operationId: integrations/get_by_id
       summary: Get integration metadata
+      operationId: getIntegrationMetadata
       description: |-
         Get integration metadata by ID.
         Note: If you're interested in joining the beta, please reach out to your Pinterest account manager.
@@ -10288,8 +10316,8 @@ paths:
       x-sandbox: disabled
   /media:
     get:
-      operationId: media/list
       summary: List media uploads
+      operationId: listMediaUploads
       description: |-
         List media uploads filtered by given parameters.
 
@@ -10358,8 +10386,8 @@ paths:
       x-ratelimit-category: org_read
       x-sandbox: enabled
     post:
-      operationId: media/create
       summary: Register media upload
+      operationId: registerMediaUpload
       description: |-
         Register your intent to upload media.
 
@@ -10433,8 +10461,8 @@ paths:
       x-sandbox: enabled
   '/media/{media_id}':
     get:
-      operationId: media/get
       summary: Get media upload details
+      operationId: getMediaUploadDetails
       description: |-
         Get details for a registered media upload, including its current status.
 
@@ -10493,8 +10521,8 @@ paths:
       x-sandbox: enabled
   /notifications:
     post:
-      operationId: notification/post
       summary: Receive notifications from external partners.
+      operationId: receiveNotificationsFromExternalPartners
       description: Used by third-party partners to send notifications to Pinterest. These notifications could be specific for your use-case or generic notification that are accepted by Pinterests' systems. This API is gated and you need to request access to this feature.
       requestBody:
         description: notification event.
@@ -10559,8 +10587,8 @@ paths:
       x-sandbox: enabled
   /oauth/conversion_token:
     post:
-      operationId: oauth/conversion_token
       summary: Generate OAuth access token for conversion API
+      operationId: generateOauthAccessTokenForConversionApi
       description: Generate a new and long-lived OAuth access token dedicated for sending conversions using a valid access token.
       responses:
         '200':
@@ -10584,8 +10612,8 @@ paths:
       x-sandbox: enabled
   /oauth/token:
     post:
-      operationId: oauth/token
       summary: Generate OAuth access token
+      operationId: generateOauthAccessToken
       description: |-
         Generate a new OAuth access token using an authorization code; or refresh an existing one using a continuous refresh token.
 
@@ -10624,8 +10652,8 @@ paths:
       x-sandbox: enabled
   /oauth/token/revoke:
     post:
-      operationId: token/revoke
       summary: Revoke a token
+      operationId: revokeAToken
       description: Revokes an access or refresh token. Only tokens issued for system users are currently supported. Revoked tokens become immediately invalid and unusable.
       requestBody:
         description: Body containing the token to revoke.
@@ -10669,8 +10697,8 @@ paths:
       x-sandbox: enabled
   /pins:
     post:
-      operationId: pins/create
       summary: Create Pin
+      operationId: createPin
       description: |2-
 
 
@@ -10756,8 +10784,8 @@ paths:
       x-ratelimit-category: org_write
       x-sandbox: enabled
     get:
-      operationId: pins/list
       summary: List Pins
+      operationId: listPins
       description: |2-
 
 
@@ -10844,8 +10872,8 @@ paths:
       x-sandbox: enabled
   '/pins/{pin_id}':
     get:
-      operationId: pins/get
       summary: Get Pin
+      operationId: getPin
       description: |2-
 
 
@@ -10915,8 +10943,8 @@ paths:
       x-ratelimit-category: org_read
       x-sandbox: enabled
     patch:
-      operationId: pins/update
       summary: Update Pin
+      operationId: updatePin
       description: |-
         Update a pin owned by the "operating user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -10995,8 +11023,8 @@ paths:
       x-ratelimit-category: org_write
       x-sandbox: enabled
     delete:
-      operationId: pins/delete
       summary: Delete Pin
+      operationId: deletePin
       description: |2-
 
 
@@ -11066,8 +11094,8 @@ paths:
       x-sandbox: enabled
   '/pins/{pin_id}/analytics':
     get:
-      operationId: pins/analytics
       summary: Get Pin analytics
+      operationId: getPinAnalytics
       description: |-
         Get analytics for a Pin owned by the "operation user_account" - or on a group board that has been shared with this account.
         - By default, the "operation user_account" is the token user_account.
@@ -11139,8 +11167,8 @@ paths:
       x-sandbox: disabled
   /pins/analytics:
     get:
-      operationId: multi_pins/analytics
       summary: Get multiple Pin analytics
+      operationId: getMultiplePinAnalytics
       description: |-
         <strong>This endpoint is currently in beta and not available to all apps. <a href='/docs/getting-started/using-beta-and-restricted-features/'>Learn more</a>.</strong>
 
@@ -11266,8 +11294,8 @@ paths:
       x-sandbox: disabled
   '/pins/{pin_id}/save':
     post:
-      operationId: pins/save
       summary: Save Pin
+      operationId: savePin
       description: |-
         Save a Pin on a board or board section owned by the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -11396,8 +11424,8 @@ paths:
       x-sandbox: enabled
   /resources/ad_account_countries:
     get:
-      operationId: ad_account_countries/get
       summary: Get ad accounts countries
+      operationId: getAdAccountsCountries
       description: Get Ad Accounts countries
       responses:
         '200':
@@ -11423,8 +11451,8 @@ paths:
       x-sandbox: enabled
   /resources/delivery_metrics:
     get:
-      operationId: delivery_metrics/get
       summary: Get available metrics' definitions
+      operationId: getAvailableMetricsDefinitions
       description: |-
         Get the definitions for ads and organic metrics available across both synchronous and asynchronous report endpoints.
         The `display_name` attribute will match how the metric is named in our native tools like Ads Manager.
@@ -11459,8 +11487,8 @@ paths:
       x-sandbox: enabled
   /resources/lead_form_questions:
     get:
-      operationId: lead_form_questions/get
       summary: Get lead form questions
+      operationId: getLeadFormQuestions
       description: |-
         Get a list of all lead form question type names. Some questions might not be used.
 
@@ -11483,8 +11511,8 @@ paths:
       x-sandbox: enabled
   /resources/metrics_ready_state:
     get:
-      operationId: metrics_ready_state/get
       summary: Get metrics ready state
+      operationId: getMetricsReadyState
       description: Learn whether conversion or non-conversion metrics are finalized and ready to query.
       parameters:
         - name: date
@@ -11518,8 +11546,8 @@ paths:
       x-sandbox: enabled
   '/resources/targeting/interests/{interest_id}':
     get:
-      operationId: interest_targeting_options/get
       summary: Get interest details
+      operationId: getInterestDetails
       description: '<p>Get details of a specific interest given interest ID.</p> <p>Click <a href="https://docs.google.com/spreadsheets/d/1HxL-0Z3p2fgxis9YBP2HWC3tvPrs1hAuHDRtH-NJTIM/edit#gid=118370875" target="_blank">here</a> for a spreadsheet listing interests and their IDs.</p>'
       parameters:
         - $ref: '#/components/parameters/path_interest_id'
@@ -11547,8 +11575,8 @@ paths:
       x-sandbox: enabled
   '/resources/targeting/{targeting_type}':
     get:
-      operationId: targeting_options/get
       summary: Get targeting options
+      operationId: getTargetingOptions
       description: |-
         <p>You can use targeting values in ads placement to define your intended audience. </p> <p>Targeting metrics are organized around targeting specifications.</p> <p>For more information on ads targeting, see <a class="reference external" href="https://help.pinterest.com/en/business/article/audience-targeting" target="_blank">Audience targeting</a>.</p>
         <p><b>Sample return:</b></p> <pre class="literal-block"> [{&quot;36313&quot;: &quot;Australia: Moreton Bay - North&quot;, &quot;124735&quot;: &quot;Canada: North Battleford&quot;, &quot;36109&quot;: &quot;Australia: Murray&quot;, &quot;36108&quot;: &quot;Australia: Mid North Coast&quot;, &quot;36101&quot;: &quot;Australia: Capital Region&quot;, &quot;811&quot;: &quot;U.S.: Reno&quot;, &quot;36103&quot;: &quot;Australia: Central West&quot;, &quot;36102&quot;: &quot;Australia: Central Coast&quot;, &quot;36105&quot;: &quot;Australia: Far West and Orana&quot;, &quot;36104&quot;: &quot;Australia: Coffs Harbour - Grafton&quot;, &quot;36107&quot;: &quot;Australia: Illawarra&quot;, &quot;36106&quot;: &quot;Australia: Hunter Valley Exc Newcastle&quot;, &quot;554017&quot;: &quot;New Zealand: Wanganui&quot;, &quot;554016&quot;: &quot;New Zealand: Marlborough&quot;, &quot;554015&quot;: &quot;New Zealand: Gisborne&quot;, &quot;554014&quot;: &quot;New Zealand: Tararua&quot;, &quot;554013&quot;: &quot;New Zealand: Invercargill&quot;, &quot;GR&quot;: &quot;Greece&quot;, &quot;554011&quot;: &quot;New Zealand: Whangarei&quot;, &quot;554010&quot;: &quot;New Zealand: Far North&quot;, &quot;717&quot;: &quot;U.S.: Quincy-Hannibal-Keokuk&quot;, &quot;716&quot;: &quot;U.S.: Baton Rouge&quot;,...}] </pre>
@@ -11582,8 +11610,8 @@ paths:
       x-sandbox: enabled
   /search/boards:
     get:
-      operationId: search_user_boards/get
       summary: Search user's boards
+      operationId: searchUserSBoards
       description: |-
         Search for boards for the "operation user_account". This includes boards of all board types.
         - By default, the "operation user_account" is the token user_account.
@@ -11627,8 +11655,8 @@ paths:
       x-sandbox: disabled
   /search/pins:
     get:
-      operationId: search_user_pins/list
       summary: Search user's Pins
+      operationId: searchUserSPins
       description: |-
         Search for pins for the "operation user_account".
         - By default, the "operation user_account" is the token user_account.
@@ -11683,6 +11711,7 @@ paths:
     get:
       operationId: search_partner_pins
       summary: Search pins by a given search term
+      operationId: searchPinsByAGivenSearchTerm
       description: |-
         <strong>This endpoint is currently in beta and not available to all apps. <a href='/docs/getting-started/using-beta-and-restricted-features/'>Learn more</a>.</strong>
 
@@ -11749,8 +11778,8 @@ paths:
       x-sandbox: disabled
   /terms/related:
     get:
-      operationId: terms_related/list
       summary: List related terms
+      operationId: listRelatedTerms
       description: |-
         Get a list of terms logically related to each input term. <p/>
         Example: the term 'workout' would list related terms like 'one song workout', 'yoga workout', 'workout motivation', etc.
@@ -11787,8 +11816,8 @@ paths:
       x-sandbox: enabled
   /terms/suggested:
     get:
-      operationId: terms_suggested/list
       summary: List suggested terms
+      operationId: listSuggestedTerms
       description: |-
         Get popular search terms that begin with your input term. <p/>
         Example: 'sport' would return popular terms like 'sports bar' and 'sportswear', but not 'motor sports' since the phrase does not begin with the given term.
@@ -11826,8 +11855,8 @@ paths:
       x-sandbox: enabled
   '/trends/keywords/{region}/top/{trend_type}':
     get:
-      operationId: trending_keywords/list
       summary: List trending keywords
+      operationId: listTrendingKeywords
       description: |
         <p>Get the top trending search keywords among the Pinterest user audience.</p> <p>Trending keywords can be used to inform ad targeting, budget strategy, and creative decisions about which products and Pins will resonate with your audience.</p> <p>Geographic, demographic and interest-based filters are available to narrow down to the top trends among a specific audience. Multiple trend types are supported that can be used to identify newly-popular, evergreen or seasonal keywords.</p> <p>For an interactive way to explore this data, please visit <a href="https://trends.pinterest.com">trends.pinterest.com</a>.
       parameters:
@@ -11902,8 +11931,8 @@ paths:
       x-sandbox: enabled
   /user_account:
     get:
-      operationId: user_account/get
       summary: Get user account
+      operationId: getUserAccount
       description: |-
         Get account information for the "operation user_account"
         - By default, the "operation user_account" is the token user_account.
@@ -11944,8 +11973,8 @@ paths:
       x-sandbox: enabled
   /user_account/analytics:
     get:
-      operationId: user_account/analytics
       summary: Get user account analytics
+      operationId: getUserAccountAnalytics
       description: |-
         Get analytics for the "operation user_account"
         - By default, the "operation user_account" is the token user_account.
@@ -12002,8 +12031,8 @@ paths:
       x-sandbox: disabled
   /user_account/analytics/top_pins:
     get:
-      operationId: user_account/analytics/top_pins
       summary: Get user account top pins analytics
+      operationId: getUserAccountTopPinsAnalytics
       description: |-
         Gets analytics data about a user's top pins (limited to the top 50).
         - By default, the "operation user_account" is the token user_account.
@@ -12057,8 +12086,8 @@ paths:
       x-sandbox: disabled
   /user_account/analytics/top_video_pins:
     get:
-      operationId: user_account/analytics/top_video_pins
       summary: Get user account top video pins analytics
+      operationId: getUserAccountTopVideoPinsAnalytics
       description: |-
         Gets analytics data about a user's top video pins (limited to the top 50).
         - By default, the "operation user_account" is the token user_account.
@@ -12112,8 +12141,8 @@ paths:
       x-sandbox: disabled
   /user_account/businesses:
     get:
-      operationId: linked_business_accounts/get
       summary: List linked businesses
+      operationId: listLinkedBusinesses
       description: Get a list of your linked business accounts.
       responses:
         '200':
@@ -12141,8 +12170,8 @@ paths:
       x-sandbox: enabled
   /user_account/followers:
     get:
-      operationId: followers/list
       summary: List followers
+      operationId: listFollowers
       description: Get a list of your followers.
       parameters:
         - $ref: '#/components/parameters/query_bookmark'
@@ -12187,8 +12216,8 @@ paths:
       x-sandbox: enabled
   /user_account/following:
     get:
-      operationId: user_following/get
       summary: List following
+      operationId: listFollowing
       description: Get a list of who a certain user follows.
       parameters:
         - $ref: '#/components/parameters/query_bookmark'
@@ -12227,8 +12256,8 @@ paths:
       x-sandbox: disabled
   /user_account/following/boards:
     get:
-      operationId: boards_user_follows/list
       summary: List following boards
+      operationId: listFollowingBoards
       description: Get a list of the boards a user follows. The request returns a board summary object array.
       parameters:
         - $ref: '#/components/parameters/query_bookmark'
@@ -12275,8 +12304,8 @@ paths:
       x-sandbox: enabled
   '/user_account/following/{username}':
     post:
-      operationId: follow_user/update
       summary: Follow user
+      operationId: followUser
       description: |-
         <strong>This endpoint is currently in beta and not available to all apps. <a href='/docs/getting-started/using-beta-and-restricted-features/'>Learn more</a>.</strong>
 
@@ -12323,8 +12352,8 @@ paths:
       x-sandbox: enabled
   /user_account/websites:
     post:
-      operationId: verify_website/update
       summary: Verify website
+      operationId: verifyWebsite
       description: Verify a website as a signed-in user.
       parameters:
         - $ref: '#/components/parameters/query_ad_account_id'
@@ -12356,8 +12385,8 @@ paths:
       x-ratelimit-category: org_write
       x-sandbox: disabled
     get:
-      operationId: user_websites/get
       summary: Get user websites
+      operationId: getUserWebsites
       description: 'Get user websites, claimed or not'
       parameters:
         - $ref: '#/components/parameters/query_bookmark'
@@ -12399,8 +12428,8 @@ paths:
       x-ratelimit-category: org_read
       x-sandbox: disabled
     delete:
-      operationId: unverify_website/delete
       summary: Unverify website
+      operationId: unverifyWebsite
       description: Unverifu a website verified by the signed-in user.
       parameters:
         - $ref: '#/components/parameters/query_website'
@@ -12431,8 +12460,8 @@ paths:
       x-sandbox: disabled
   /user_account/websites/verification:
     get:
-      operationId: website_verification/get
       summary: Get user verification code for website claiming
+      operationId: getUserVerificationCodeForWebsiteClaiming
       description: Get verification code for user to install on the website to claim it.
       parameters:
         - $ref: '#/components/parameters/query_ad_account_id'
@@ -12469,8 +12498,8 @@ paths:
       x-sandbox: disabled
   '/users/{username}/interests/follow':
     get:
-      operationId: user_account/followed_interests
       summary: List following interests
+      operationId: listFollowingInterests
       description: Get a list of a user's following interests in one place.
       parameters:
         - $ref: '#/components/parameters/path_username'
@@ -12526,8 +12555,8 @@ paths:
       x-sandbox: enabled
   /trends/topics/featured:
     get:
-      operationId: trends_featured_topics/list
       summary: Get featured topics
+      operationId: getFeaturedTopics
       description: '  Enables advertisers to pull top five trending topics by interest and market, at full parity with the Pinterest Trends UI.'
       parameters:
         - $ref: '#/components/parameters/query_interest'
@@ -12588,8 +12617,8 @@ paths:
       x-sandbox: disabled
   /trends/product_categories/details:
     get:
-      operationId: trends_product_categories_details/list
       summary: Get product category details
+      operationId: getProductCategoryDetails
       description: '  Enables advertisers to retrieve demographic information, related pins, and trend lines for specified product categories'
       parameters:
         - $ref: '#/components/parameters/ProductCategoryIds'
@@ -12652,8 +12681,8 @@ paths:
       x-sandbox: disabled
   /trends/product_categories/trending:
     get:
-      operationId: trends_product_categories_trending/list
       summary: Get a list of growing Shopping Product Categories
+      operationId: getAListOfGrowingShoppingProductCategories
       description: '  Get a list of growing Shopping Product Categories in ranked order allowing filtering by engagement type, vertical, age, and gender.'
       parameters:
         - $ref: '#/components/parameters/query_product_category_detail_region'
@@ -12717,8 +12746,8 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/conversion_eqs':
     get:
-      operationId: conversion_eqs/list
       summary: Get event quality score (EQS)
+      operationId: getEventQualityScoreEqs
       description: |-
         Get the Event Quality Score (EQS) of your conversion signals.
 
