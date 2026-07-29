@@ -1,0 +1,607 @@
+openapi: 3.0.3
+info:
+  title: Slack Web API (Zernio subset)
+  description: |
+    Hand-written subset of the Slack Web API covering only the methods Zernio uses.
+    Transcribed from docs.slack.dev reference pages on 2026-07-29. The official
+    slackapi/slack-api-specs repo is frozen (Oct 2020, OpenAPI 2.0, predates the
+    current file upload flow) and must not be used as a reference.
+
+    **Critical Slack-isms (different from every other platform we integrate):**
+    - API errors arrive as HTTP 200 with `{"ok": false, "error": "..."}`. HTTP status
+      codes are only used for transport-level failures (429 rate limit with a
+      Retry-After header in seconds). Clients MUST inspect `ok` on every response.
+    - Auth is a per-workspace bot token (`xoxb-...`) obtained via oauth.v2.access,
+      sent as `Authorization: Bearer` header. Tokens do not expire (token rotation
+      is NOT enabled for our app; it is opt-in and irreversible).
+    - `chat.postMessage` silently truncates text above 40,000 chars (no error);
+      `chat.update` hard-fails with `msg_too_long` above 4,000 chars.
+    - Message identity is the `(channel, ts)` pair; `ts` is only unique per channel.
+    - Rate limits are per method + per workspace + per app. `chat.postMessage` has a
+      special limit of ~1 message/second/channel. Tier 3 = 50+/min, Tier 4 = 100+/min.
+    - `files.upload` is retired (Nov 2025). Media MUST use the 3-step external flow:
+      files.getUploadURLExternal (per file) -> POST bytes to upload_url ->
+      one files.completeUploadExternal (all files + caption = ONE message).
+    - `conversations.history`/`conversations.replies` are rate-limited to
+      1 req/min + max 15 objects for non-Marketplace apps (all our installs);
+      they are deliberately NOT in this spec. The inbox is Events-API-driven.
+
+    **Base URL:** https://slack.com/api
+    **Text escaping:** `&`, `<`, `>` are control characters and must be entity-escaped
+    in user-supplied text; raw URLs still auto-link after escaping.
+  version: '2026-07-29'
+  contact:
+    name: Slack API Documentation
+    url: https://docs.slack.dev/reference/methods
+
+servers:
+  - url: https://slack.com/api
+    description: Slack Web API
+
+security:
+  - botToken: []
+
+components:
+  securitySchemes:
+    botToken:
+      type: http
+      scheme: bearer
+      description: Workspace bot token (xoxb-...) from oauth.v2.access
+
+  schemas:
+    SlackResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+          description: False means the call failed; read `error` (HTTP status is still 200)
+        error:
+          type: string
+          description: Machine-readable error code, e.g. channel_not_found, not_in_channel, invalid_auth, token_revoked, ratelimited
+        warning:
+          type: string
+        response_metadata:
+          type: object
+          properties:
+            next_cursor:
+              type: string
+              description: Cursor pagination; empty/absent string means no more pages. URL-encode when sending back (cursors usually end in '=')
+
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Workspace id (T...)
+        name:
+          type: string
+
+    Channel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: C... (public), G... (legacy private), D... (im)
+        name:
+          type: string
+        is_channel:
+          type: boolean
+        is_private:
+          type: boolean
+        is_member:
+          type: boolean
+          description: Whether the bot is a member. Public channels are all listed regardless of membership; private ones appear only where the bot is a member
+        is_archived:
+          type: boolean
+        is_shared:
+          type: boolean
+        is_ext_shared:
+          type: boolean
+          description: Slack Connect channel (shared with an external org)
+        is_org_shared:
+          type: boolean
+        num_members:
+          type: integer
+        topic:
+          type: object
+          properties: { value: { type: string } }
+        purpose:
+          type: object
+          properties: { value: { type: string } }
+
+    Message:
+      type: object
+      properties:
+        ts:
+          type: string
+          description: Message id, unique per channel only. Store as (channel, ts)
+        thread_ts:
+          type: string
+        text:
+          type: string
+        user:
+          type: string
+        bot_id:
+          type: string
+
+  responses:
+    RateLimited:
+      description: HTTP 429; honor the Retry-After header (seconds)
+      headers:
+        Retry-After:
+          schema: { type: integer }
+
+paths:
+  /oauth.v2.access:
+    post:
+      operationId: oauthV2Access
+      summary: Exchange an OAuth code for a workspace bot token (or refresh under token rotation, unused by us)
+      security: []
+      description: |
+        Send client_id/client_secret via HTTP Basic auth (recommended by Slack) rather than
+        form params. `redirect_uri` must exactly match the one used on the authorize URL.
+        The authorization `code` expires after 10 minutes. Treat every successful exchange
+        as token-replacing for the workspace: update the stored token on ALL sibling
+        channel accounts with the same team.id.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code: { type: string }
+                redirect_uri: { type: string }
+                grant_type: { type: string, description: Only for token rotation (unused) }
+      responses:
+        '200':
+          description: Token exchange result
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      access_token: { type: string, description: 'Bot token, xoxb-...' }
+                      token_type: { type: string, description: '"bot"' }
+                      scope: { type: string, description: Comma-separated granted bot scopes }
+                      bot_user_id: { type: string, description: Bot's user id in this workspace; needed to match tokens_revoked events }
+                      app_id: { type: string }
+                      team: { $ref: '#/components/schemas/Team' }
+                      enterprise:
+                        type: object
+                        nullable: true
+                        description: Non-null on Enterprise Grid workspaces
+                        properties:
+                          id: { type: string }
+                          name: { type: string }
+                      is_enterprise_install: { type: boolean }
+                      authed_user:
+                        type: object
+                        description: The installing human; we do not store their user token
+                        properties:
+                          id: { type: string }
+
+  /auth.test:
+    post:
+      operationId: authTest
+      summary: Validate a token; returns workspace + bot identity
+      description: |
+        No scopes required. Special generous rate tier; safe for validateToken probes.
+        Errors invalid_auth / token_revoked / account_inactive mean reconnect.
+      responses:
+        '200':
+          description: Identity of the token
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      url: { type: string, description: Workspace URL }
+                      team: { type: string, description: Workspace name }
+                      team_id: { type: string }
+                      user: { type: string, description: Bot username }
+                      user_id: { type: string, description: Bot user id }
+                      bot_id: { type: string }
+                      enterprise_id: { type: string }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /team.info:
+    get:
+      operationId: teamInfo
+      summary: Workspace name/domain/icon for account display
+      description: Scope team:read. Tier 3.
+      responses:
+        '200':
+          description: Team object
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      team:
+                        type: object
+                        properties:
+                          id: { type: string }
+                          name: { type: string }
+                          domain: { type: string }
+                          icon:
+                            type: object
+                            properties:
+                              image_132: { type: string }
+                              image_default: { type: boolean, description: True means no custom icon set }
+
+  /conversations.list:
+    get:
+      operationId: conversationsList
+      summary: List channels for the channel picker
+      description: |
+        Scopes channels:read (public) + groups:read (private). Tier 2 (20+/min): cache,
+        don't poll. ALL public channels are listed regardless of bot membership
+        (is_member says which); private channels appear only where the bot is a member.
+        Pagination gotcha: filters apply AFTER the page is fetched, so pages can be
+        short or empty while next_cursor is still non-empty. Loop on cursor, never on count.
+      parameters:
+        - name: types
+          in: query
+          schema: { type: string, default: public_channel }
+          description: 'Comma-separated: public_channel,private_channel'
+        - name: exclude_archived
+          in: query
+          schema: { type: boolean, default: false }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 100, maximum: 999 }
+          description: Recommended 200
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Channel page
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      channels:
+                        type: array
+                        items: { $ref: '#/components/schemas/Channel' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /conversations.info:
+    get:
+      operationId: conversationsInfo
+      summary: Single channel details (membership check at connect finalize)
+      description: Scopes channels:read / groups:read. Tier 3.
+      parameters:
+        - name: channel
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Channel object
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      channel: { $ref: '#/components/schemas/Channel' }
+
+  /conversations.join:
+    post:
+      operationId: conversationsJoin
+      summary: Join a public channel (bot self-invite)
+      description: |
+        Scope channels:join. Tier 3. PUBLIC channels only; private channels return
+        method_not_supported_for_channel_type (the bot must be /invite-d by a human).
+        Already a member returns ok:true with warning already_in_channel (idempotent).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [channel]
+              properties:
+                channel: { type: string }
+      responses:
+        '200':
+          description: Join result (inspect ok/error)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      channel: { $ref: '#/components/schemas/Channel' }
+
+  /chat.postMessage:
+    post:
+      operationId: chatPostMessage
+      summary: Publish a text message to a channel
+      description: |
+        Scope chat:write (+ chat:write.public to post to non-member PUBLIC channels,
+        + chat:write.customize for username/icon_url overrides). Special rate tier:
+        ~1 msg/sec/channel. Text above 40,000 chars is SILENTLY truncated (validate
+        client-side; there is no msg_too_long here). Escape & < > in user text.
+        Missing access surfaces as channel_not_found (NOT not_in_channel) when the
+        channel exists but the bot cannot see it; for a channel we know exists,
+        try conversations.join once, then fail as user-error.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [channel]
+              properties:
+                channel: { type: string }
+                text: { type: string, description: mrkdwn by default; also the notification fallback when blocks are used }
+                thread_ts: { type: string, description: Parent message ts to reply in thread }
+                reply_broadcast: { type: boolean }
+                unfurl_links: { type: boolean }
+                unfurl_media: { type: boolean }
+                username: { type: string, description: Per-message bot name override (chat:write.customize) }
+                icon_url: { type: string, description: Per-message bot avatar override (chat:write.customize) }
+                mrkdwn: { type: boolean, default: true }
+      responses:
+        '200':
+          description: Posted message (inspect ok/error)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      channel: { type: string }
+                      ts: { type: string, description: Persist (channel, ts) as the post identity }
+                      message: { $ref: '#/components/schemas/Message' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /chat.update:
+    post:
+      operationId: chatUpdate
+      summary: Edit a previously posted bot message
+      description: |
+        Scope chat:write. Tier 3. Bot can only edit its OWN messages
+        (cant_update_message otherwise). HARD 4,000-char cap (msg_too_long), stricter
+        than postMessage's silent 40k truncation, so posts over 4,000 chars are not
+        editable. Workspace admins can close the edit window (edit_window_closed).
+        Merge trap: sending text without blocks REMOVES existing blocks.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [channel, ts]
+              properties:
+                channel: { type: string }
+                ts: { type: string }
+                text: { type: string }
+      responses:
+        '200':
+          description: Update result (inspect ok/error)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      channel: { type: string }
+                      ts: { type: string }
+                      text: { type: string }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /chat.delete:
+    post:
+      operationId: chatDelete
+      summary: Delete a previously posted bot message
+      description: |
+        Scope chat:write. Tier 3. Bot can only delete its own messages. Workspace
+        retention/compliance settings can block deletion (cant_delete_message).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [channel, ts]
+              properties:
+                channel: { type: string }
+                ts: { type: string }
+      responses:
+        '200':
+          description: Delete result (inspect ok/error)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      channel: { type: string }
+                      ts: { type: string }
+
+  /chat.getPermalink:
+    get:
+      operationId: chatGetPermalink
+      summary: Resolve the public URL of a posted message
+      description: No scopes required. Generous special tier (hundreds/min).
+      parameters:
+        - name: channel
+          in: query
+          required: true
+          schema: { type: string }
+        - name: message_ts
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Permalink
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      permalink: { type: string }
+
+  /files.getUploadURLExternal:
+    post:
+      operationId: filesGetUploadURLExternal
+      summary: 'Media upload step 1 of 3: get a one-time upload URL (call once per file)'
+      description: |
+        Scope files:write. Tier 4. `length` must be the EXACT byte size. Workspace-policy
+        errors (file_uploads_disabled, file_upload_size_restricted, storage_limit_reached,
+        file_type_not_allowed) are user-errors, never retried. Step 2 is a raw HTTP POST
+        of the file bytes to upload_url (no auth header needed).
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [filename, length]
+              properties:
+                filename: { type: string }
+                length: { type: integer, description: Exact byte count of the file }
+                alt_txt: { type: string, maxLength: 1000 }
+      responses:
+        '200':
+          description: Upload ticket
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      upload_url: { type: string }
+                      file_id: { type: string }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /files.completeUploadExternal:
+    post:
+      operationId: filesCompleteUploadExternal
+      summary: 'Media upload step 3 of 3: share all uploaded files as ONE message'
+      description: |
+        Scope files:write. Tier 4. Callable only once per upload ticket. Multiple file
+        ids in one call = one message carrying all files; initial_comment is the caption.
+        REQUIRES bot membership in the channel (not_in_channel) even with
+        chat:write.public, so join-and-retry must wrap this call too. Files are
+        processed asynchronously after completion. The response does NOT include the
+        share message ts: resolve it via files.info -> file.shares (may lag); if
+        unresolved, persist the post without ts and degrade edit/delete for it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [files]
+              properties:
+                files:
+                  type: array
+                  description: '[{id, title}] from step 1'
+                  items:
+                    type: object
+                    required: [id]
+                    properties:
+                      id: { type: string }
+                      title: { type: string }
+                channel_id: { type: string, description: Omitting it leaves the files private (no message) }
+                initial_comment: { type: string, description: Caption text of the share message }
+                thread_ts: { type: string }
+      responses:
+        '200':
+          description: Completed files (no message ts here; see description)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: string }
+                            title: { type: string }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /files.info:
+    get:
+      operationId: filesInfo
+      summary: Resolve a file's share message ts after completeUploadExternal
+      description: |
+        Scope files:read (covered by files:write for our own uploads; verify at
+        implementation). shares.public|private.{channelId}[].ts is the share
+        message identity used for edit/delete/permalink of media posts.
+      parameters:
+        - name: file
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: File object incl. shares
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      file:
+                        type: object
+                        properties:
+                          id: { type: string }
+                          shares:
+                            type: object
+                            description: 'shares.public|private -> {channelId: [{ts, thread_ts}]}'
+
+  /auth.revoke:
+    post:
+      operationId: authRevoke
+      summary: Revoke the workspace bot token (disconnect)
+      description: |
+        DANGER: revokes the WORKSPACE token shared by all sibling channel accounts and
+        deactivates the bot (removes its channel memberships). Only call when
+        disconnecting the LAST active Zernio account for the workspace (metadata.teamId);
+        otherwise disconnecting one channel kills them all.
+      parameters:
+        - name: test
+          in: query
+          schema: { type: boolean, description: Dry-run without revoking }
+      responses:
+        '200':
+          description: Revocation result
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SlackResponse'
+                  - type: object
+                    properties:
+                      revoked: { type: boolean }
