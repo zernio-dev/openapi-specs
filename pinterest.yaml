@@ -1379,7 +1379,6 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/audiences/ad_accounts/shared':
     patch:
-      operationId: update_ad_account_to_ad_account_shared_audience
       summary: Update audience sharing between ad accounts
       operationId: updateAudienceSharingBetweenAdAccounts
       description: 'From an ad account, share a specific audience with another ad account, or revoke access to a previously shared audience. Only the audience owner account can share the audience. The recipient ad account(s) must be in the same <a href=''https://help.pinterest.com/en/business/article/create-and-manage-accounts''>Pinterest Business Hierarchy</a> as the business owner of the ad account.<br> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
@@ -1422,7 +1421,6 @@ paths:
       x-sandbox: disabled
   '/ad_accounts/{ad_account_id}/audiences/businesses/shared':
     patch:
-      operationId: update_ad_account_to_business_shared_audience
       summary: Update audience sharing from an ad account to businesses
       operationId: updateAudienceSharingFromAnAdAccountToBusinesses
       description: 'From an ad account, share a specific audience with a business account, or revoke access to a previously shared audience. Only the audience owner account can share the audience. The recipient business account must be in the same business hierarchy as the business owner of the ad account.<br> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
@@ -5955,7 +5953,6 @@ paths:
       x-sandbox: enabled
   /businesses/invites:
     patch:
-      operationId: respond_business_access_invites
       summary: Accept or decline an invite/request
       operationId: acceptOrDeclineAnInviteRequest
       description: Accept or decline invites or requests.
@@ -6126,7 +6123,6 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/invites/assets/access':
     post:
-      operationId: create_asset_invites
       summary: Update invite/request with an asset permission
       operationId: updateInviteRequestWithAnAssetPermission
       description: |-
@@ -6305,7 +6301,6 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     delete:
-      operationId: delete_business_membership
       summary: Terminate business memberships
       operationId: terminateBusinessMemberships
       description: Terminate memberships between the specified members and your business.
@@ -6586,7 +6581,6 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     post:
-      operationId: create_membership_or_partnership_invites
       summary: Create invites or requests
       operationId: createInvitesOrRequests
       description: |-
@@ -6634,7 +6628,6 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     delete:
-      operationId: cancel_invites_or_requests
       summary: Cancel invites/requests
       operationId: cancelInvitesRequests
       description: Cancel membership/partnership invites and/or requests.
@@ -6669,7 +6662,6 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/partners/assets':
     patch:
-      operationId: update_partner_asset_access_handler_impl
       summary: Assign/Update partner asset permissions
       operationId: assignUpdatePartnerAssetPermissions
       description: |-
@@ -6710,7 +6702,6 @@ paths:
       x-ratelimit-category: ads_write
       x-sandbox: disabled
     delete:
-      operationId: delete_partner_asset_access_handler_impl
       summary: Delete partner access to asset
       operationId: deletePartnerAccessToAsset
       description: |-
@@ -6856,7 +6847,6 @@ paths:
       x-ratelimit-category: ads_read
       x-sandbox: disabled
     delete:
-      operationId: delete_business_partners
       summary: Terminate business partnerships
       operationId: terminateBusinessPartnerships
       description: |-
@@ -7002,7 +6992,6 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/audiences/ad_accounts/shared':
     patch:
-      operationId: update_business_to_ad_account_shared_audience
       summary: Update audience sharing from a business to ad accounts
       operationId: updateAudienceSharingFromABusinessToAdAccounts
       description: 'From a business, share a specific audience with other ad account(s), or revoke access to a previously shared audience. <ul> <li>If the business is the owner of the audience, it can share with any ad account within the same business hierarchy.</li> <li>If the business is the recipient of the audience, it can share with any of its owned ad accounts.</li> </ul> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
@@ -7045,7 +7034,6 @@ paths:
       x-sandbox: disabled
   '/businesses/{business_id}/audiences/businesses/shared':
     patch:
-      operationId: update_business_to_business_shared_audience
       summary: Update audience sharing between businesses
       operationId: updateAudienceSharingBetweenBusinesses
       description: 'From a business, share a specific audience with another business account, or revoke access to a previously shared audience. Only the audience owner can share the audience with other businesses, and the recipient business must be within the same business hierarchy.<br> This endpoint is not available to all apps.<a href=''/docs/getting-started/using-beta-and-restricted-features/''>Learn more</a>.'
@@ -8680,7 +8668,6 @@ paths:
               RetailFewFiltersUsingAllOf:
                 summary: A simple retail example that applies "all of the following filters".
                 operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
-                operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a product to be included in the Product Group.
@@ -8699,7 +8686,6 @@ paths:
                               - Luxury Items
               RetailManyFiltersUsingAnyOf:
                 summary: A more complete retail example that applies "any of the following filters".
-                operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
                 operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
                 description: |
                   The use of "any_of" creates a Product Group where any of the individual filters
@@ -8791,7 +8777,6 @@ paths:
               CatalogBasedRetailFewFiltersUsingAllOf:
                 summary: A simple catalog based retail example that applies "all of the following filters".
                 operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
-                operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a retail to be included in the Product Group.
@@ -8813,7 +8798,6 @@ paths:
                             negated: false
               HotelFewFiltersUsingAllOf:
                 summary: A simple hotel example that applies "all of the following filters".
-                operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
                 operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
@@ -9057,7 +9041,6 @@ paths:
               RetailFewFiltersUsingAllOf:
                 summary: A simple retail example that applies "all of the following filters".
                 operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
-                operationId: aSimpleRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a product to be included in the Product Group.
@@ -9076,7 +9059,6 @@ paths:
                             - Luxury Items
               RetailManyFiltersUsingAnyOf:
                 summary: A more complete retail example that applies "any of the following filters".
-                operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
                 operationId: aMoreCompleteRetailExampleThatAppliesAnyOfTheFollowingFilters
                 description: |
                   The use of "any_of" creates a Product Group where any of the individual filters
@@ -9168,7 +9150,6 @@ paths:
               HotelFewFiltersUsingAllOf:
                 summary: A simple hotel example that applies "all of the following filters".
                 operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
-                operationId: aSimpleHotelExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
                   must be satisfied by a hotel to be included in the Product Group.
@@ -9188,7 +9169,6 @@ paths:
                           negated: false
               CatalogBasedRetailFewFiltersUsingAllOf:
                 summary: A simple catalog based retail example that applies "all of the following filters".
-                operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
                 operationId: aSimpleCatalogBasedRetailExampleThatAppliesAllOfTheFollowingFilters
                 description: |
                   The use of "all_of" creates a Product Group where all of the individual filters
@@ -11709,7 +11689,6 @@ paths:
       x-sandbox: disabled
   /search/partner/pins:
     get:
-      operationId: search_partner_pins
       summary: Search pins by a given search term
       operationId: searchPinsByAGivenSearchTerm
       description: |-
