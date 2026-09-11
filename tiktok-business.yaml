@@ -1,0 +1,1346 @@
+openapi: 3.0.3
+info:
+  title: TikTok Business API (Accounts and Business Messaging)
+  description: |
+    The organic surface of the TikTok for Business platform, hosted on `business-api.tiktok.com`
+    and registered through business-api.tiktok.com/portal. It covers account profile reads,
+    video and photo publishing, video insights, comment management and Business Messaging.
+
+    **This is not the developer lane.** TikTok ships two unrelated organic surfaces and an
+    integration has to pick one:
+
+    | | This spec | `tiktok.yaml` |
+    | --- | --- | --- |
+    | Host | `business-api.tiktok.com` | `open.tiktokapis.com` |
+    | Portal | business-api.tiktok.com/portal | developers.tiktok.com |
+    | Identity | `creator_id` from `/tt_user/token_info/get/` | `open_id` from the developer app |
+    | Auth header | `Access-Token` | `Authorization: Bearer` |
+    | Errors | always HTTP 200, `code` is the only success signal | HTTP status plus an `error` object |
+
+    `open_id` is app scoped, so the same human has a different id under each app and one
+    connection never spans both lanes. `/business/get/` exposes neither `open_id` nor `union_id`
+    on this lane: both come back as error 40002 `field does not exist`. The identity to use
+    everywhere is `creator_id`, sent as the `business_id` parameter.
+
+    **Every response is HTTP 200.** The body is a `{code, message, data}` envelope and `code` is
+    the only success signal, so transport status alone means nothing. Not every error is JSON
+    either: `/business/message/send/` answers a GET with a plain text `Method Not Allowed`.
+
+    **Error codes observed in production:**
+
+    | Code | Meaning |
+    | --- | --- |
+    | 0 | Success |
+    | 40001 | 'No permission to operate the given creator id (wrong business_id)' |
+    | 40002 | 'Parameter or state error (also returned for a field that does not exist on the endpoint)' |
+    | 40100 | 'Too many requests, the app wide QPM overage shared with the Marketing API (not an auth failure)' |
+    | 40104 | Access token empty |
+    | 40105 | 'Access token invalid or revoked, and also what an account ineligible for Business Messaging returns' |
+    | 40130 | The token was not granted a scope some requested field needs |
+    | 40131 | 'Authorization code expired, reused, or minted with a different redirect_uri' |
+
+    Treat the code family as the status: 401xx is auth apart from 40100, other 4xxxx are caller
+    errors and 5xxxx are TikTok side failures.
+
+    **Publishing caps.** `/business/video/publish/` and `/business/photo/publish/` are each capped
+    at six posts per minute and 15 posts per account per rolling 24 hours, counted separately, so
+    an account may publish 15 videos and 15 photo posts in the same day. The 16th is deferred and
+    auto published rather than failed.
+
+    **Video posts are public only on this lane.** `/business/video/publish/` is documented as
+    publishing a public video post and its `post_info` has no privacy field, so `SELF_ONLY`,
+    `FOLLOWER_OF_CREATOR` and `MUTUAL_FOLLOW_FRIENDS` do not exist here for videos. The only route
+    to a non public video is `upload_to_draft`, which sends it to the Creator Inbox drafts where
+    the creator picks the audience. Photo posts do keep `privacy_level`.
+
+    **Comment reads exist on this lane**, unlike the developer lane where comment management is
+    write only. `/business/comment/list/` and `/business/comment/reply/list/` return comment
+    bodies, authors and counts.
+
+    **Media must be pulled from a verified domain.** Video pull URLs, photo URLs and
+    `custom_thumbnail_url` must sit on a domain verified as a URL property of the business app, or
+    the publish is refused with 40002 and a message about URL ownership verification rules.
+
+    **Scopes unlock fields, and `/business/get/` is all or nothing.** One out of scope field
+    rejects the whole call with 40130, so a profile read must ask only for what the token holds.
+    `/tt_user/token_info/get/` needs no permission and is the only way to learn what a token can
+    actually do.
+  version: '1.0'
+  contact:
+    name: Zernio Support
+    url: https://zernio.com
+
+servers:
+  - url: https://business-api.tiktok.com/open_api/v1.3
+    description: TikTok for Business open API
+
+components:
+  securitySchemes:
+    AccessToken:
+      type: apiKey
+      in: header
+      name: Access-Token
+      description: 'User access token from /tt_user/oauth2/token/. Sent in an Access-Token header, not as a bearer token.'
+
+  schemas:
+    Envelope:
+      type: object
+      description: 'Every endpoint answers HTTP 200 with this envelope. code 0 means success, anything else is an error and data is absent or empty.'
+      properties:
+        code:
+          type: integer
+          description: '0 on success. See the error code table in the spec description.'
+        message:
+          type: string
+          description: Human readable error message, empty on success
+
+    TokenGrant:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+          description: 'Valid for one year. Issuing a new token invalidates the previous one.'
+        expires_in:
+          type: integer
+          description: 'Access token lifetime in seconds, observed as 86400 (24 hours)'
+        open_id:
+          type: string
+          description: 'The account id under THIS app. App scoped, so it differs from the developer app id for the same human.'
+        scope:
+          type: string
+          description: Comma separated list of the scopes the user actually granted
+
+    TokenInfo:
+      type: object
+      properties:
+        creator_id:
+          type: string
+          description: 'The business identity, passed as business_id to every /business/ endpoint'
+        scope:
+          type: string
+          description: 'Comma separated list of granted scopes. Users can untick scopes on the consent screen, so this is the only reliable record of what the token can do.'
+
+    BusinessProfile:
+      type: object
+      description: 'Fields returned by /business/get/. Which ones may be requested depends on the granted scopes; one out of scope field rejects the whole call with 40130.'
+      properties:
+        display_name:
+          type: string
+          description: 'Readable with user.info.basic alone'
+        profile_image:
+          type: string
+          format: uri
+          description: 'Readable with user.info.basic alone'
+        is_business_account:
+          type: boolean
+          description: 'Requires user.account.type. Business Messaging refuses personal accounts, so this is worth reading at connect time.'
+        username:
+          type: string
+          description: 'The @handle. Requires user.info.username. Without that scope the account has no handle at all, so any URL built as tiktok.com/@{username}/video/{id} is wrong.'
+        profile_deep_link:
+          type: string
+          format: uri
+          description: 'Requires user.info.profile. A vm.tiktok.com short link, not the @handle URL.'
+        followers_count:
+          type: integer
+          description: 'Requires user.info.stats or user.insights'
+        following_count:
+          type: integer
+          description: 'Requires user.info.stats or user.insights'
+        total_likes:
+          type: integer
+          description: 'Requires user.info.stats or user.insights'
+        videos_count:
+          type: integer
+          description: 'Requires user.info.stats or user.insights'
+
+    Video:
+      type: object
+      description: 'One post from /business/video/list/. The insight fields are rejected as a whole unless the token holds video.insights, and a 2020 video returned zeros for every insight while the basic counters were populated, so insights appear to exist only for recent videos.'
+      properties:
+        item_id:
+          type: string
+          description: 'The video id. A 19 digit snowflake above 2^53 that the API may emit as a JSON number, so quote it before parsing or the value is silently rounded.'
+        media_type:
+          type: string
+          description: 'VIDEO or PHOTO'
+        create_time:
+          type: integer
+          description: Publish time in epoch seconds
+        thumbnail_url:
+          type: string
+          format: uri
+        share_url:
+          type: string
+          format: uri
+        caption:
+          type: string
+        likes:
+          type: integer
+        comments:
+          type: integer
+        shares:
+          type: integer
+        video_views:
+          type: integer
+        favorites:
+          type: integer
+          description: 'Requires video.insights'
+        reach:
+          type: integer
+          description: 'Requires video.insights'
+        total_time_watched:
+          type: number
+          description: 'Requires video.insights. Seconds.'
+        average_time_watched:
+          type: number
+          description: 'Requires video.insights. Seconds.'
+        full_video_watched_rate:
+          type: number
+          description: 'Requires video.insights'
+        video_duration:
+          type: number
+          description: 'Requires video.insights. Seconds.'
+        profile_views:
+          type: integer
+          description: 'Requires video.insights'
+        new_followers:
+          type: integer
+          description: 'Requires video.insights'
+        website_clicks:
+          type: integer
+          description: 'Requires video.insights'
+        email_clicks:
+          type: integer
+          description: 'Requires video.insights'
+        phone_number_clicks:
+          type: integer
+          description: 'Requires video.insights'
+        address_clicks:
+          type: integer
+          description: 'Requires video.insights'
+        app_download_clicks:
+          type: integer
+          description: 'Requires video.insights'
+
+    Comment:
+      type: object
+      properties:
+        comment_id:
+          type: string
+          description: '19 digit snowflake above 2^53, emitted as a JSON number in some payloads, so quote it before parsing'
+        video_id:
+          type: string
+        parent_comment_id:
+          type: string
+          description: Present on replies
+        unique_identifier:
+          type: string
+          description: 'The only stable author id the comment payloads and the comment.update webhook carry'
+        user_id:
+          type: string
+        create_time:
+          type: integer
+          description: Epoch seconds
+        text:
+          type: string
+        image_url:
+          type: string
+          format: uri
+          description: Present when the comment carries an image
+        likes:
+          type: integer
+        replies:
+          type: integer
+        owner:
+          type: boolean
+          description: 'Whether the authorized account wrote this comment. Ids cannot tell, because open_id is app scoped, so this flag is the only signal.'
+        liked:
+          type: boolean
+        pinned:
+          type: boolean
+        status:
+          type: string
+          description: 'HIDDEN when the comment has been hidden'
+        username:
+          type: string
+        display_name:
+          type: string
+        profile_image:
+          type: string
+          format: uri
+        reply_list:
+          type: array
+          description: 'Present on /business/comment/list/ when include_replies is true'
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    CommentPage:
+      type: object
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        has_more:
+          type: boolean
+        cursor:
+          type: string
+          description: Pass back as the cursor parameter to fetch the next page
+
+    PublishAccepted:
+      type: object
+      properties:
+        share_id:
+          type: string
+          description: 'The publish id. Pass it to /business/publish/status/ as publish_id. This is NOT the post id.'
+
+    PublishStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 'PROCESSING_DOWNLOAD, PROCESSING_UPLOAD, PUBLISH_COMPLETE, SEND_TO_USER_INBOX or FAILED'
+        post_ids:
+          type: array
+          description: 'Real post ids. Empty while TikTok is still assigning them, which can take about three minutes after PUBLISH_COMPLETE.'
+          items:
+            type: string
+        reason:
+          type: string
+          description: Failure reason when status is FAILED
+
+    VideoSettings:
+      type: object
+      description: 'The account level posting settings, the business lane equivalent of the developer lane creator_info query'
+      properties:
+        privacy_level_options:
+          type: array
+          description: 'Audiences the account may choose. Applies to photo posts only: videos published through this API are always public.'
+          items:
+            type: string
+        comment_disabled:
+          type: boolean
+          description: The account has turned comments off in the TikTok app
+        duet_disabled:
+          type: boolean
+        stitch_disabled:
+          type: boolean
+        max_video_post_duration_sec:
+          type: integer
+
+    SentMessage:
+      type: object
+      properties:
+        message:
+          type: object
+          properties:
+            message_id:
+              type: string
+
+paths:
+  # OAuth
+  /auth/authorize:
+    get:
+      servers:
+        - url: https://www.tiktok.com/v2
+      tags: [OAuth]
+      summary: Authorization page for the TikTok for Business app
+      operationId: getBusinessAuthorizationUrl
+      description: |
+        Browser redirect that mints the auth code. The registered redirect in the portal is a path
+        that ends with a slash, and the token exchange must send the byte identical value, so
+        append the slash on both sides or the exchange fails with 40131 and consumes the code.
+        The redirect back echoes the scopes the user actually granted in a `scopes` query
+        parameter next to `code`, because users can untick scopes on the consent screen.
+      parameters:
+        - name: client_key
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The business app id
+        - name: scope
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'Comma separated scopes. The Accounts API vocabulary is not the developer app vocabulary: stats live under user.insights and messaging splits into message.list.read, message.list.send and message.list.manage.'
+        - name: response_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [code]
+        - name: redirect_uri
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uri
+          description: Must byte match a redirect registered under TikTok account holder redirect URLs
+        - name: state
+          in: query
+          schema:
+            type: string
+        - name: disable_auto_auth
+          in: query
+          schema:
+            type: string
+          description: 'Set to 1 to always show the consent screen'
+      responses:
+        '302':
+          description: 'Redirect back to redirect_uri carrying code, state and the granted scopes'
+
+  /tt_user/oauth2/token/:
+    post:
+      tags: [OAuth]
+      summary: Exchange an authorization code for an access token
+      operationId: exchangeBusinessAuthCode
+      description: |
+        The auth code is single use and lives ten minutes, and a FAILED exchange still consumes it.
+        An expired, reused or wrong code is 40131, and so is a `redirect_uri` that does not byte
+        match the one the code was minted with, so 40131 does not distinguish a bad code from bad
+        client credentials. To test credentials alone, exchange a deliberately invalid code: a
+        credentials problem reports the client, this reports the code.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [client_id, client_secret, grant_type, auth_code, redirect_uri]
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                grant_type:
+                  type: string
+                  enum: [authorization_code]
+                auth_code:
+                  type: string
+                redirect_uri:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: 'Envelope. code 0 with the grant, or a non zero code such as 40131.'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TokenGrant'
+
+  /tt_user/oauth2/refresh_token/:
+    post:
+      tags: [OAuth]
+      summary: Refresh an access token
+      operationId: refreshBusinessAccessToken
+      description: 'Access tokens expire on a fixed 24 hour clock. Issuing a new one invalidates the previous one, so a refresh races any in flight call using the old token.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [client_id, client_secret, grant_type, refresh_token]
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                grant_type:
+                  type: string
+                  enum: [refresh_token]
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Envelope carrying the new grant
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TokenGrant'
+
+  /tt_user/token_info/get/:
+    post:
+      tags: [OAuth]
+      summary: Read the identity and granted scopes behind a token
+      operationId: getBusinessTokenInfo
+      description: |
+        Needs no permission and is the only way to learn what a token can actually do. Returns
+        `creator_id`, which is the `business_id` every other endpoint takes. Call it before any
+        field list is built: users untick scopes on the consent screen, and one out of scope field
+        rejects a whole `/business/get/` or `/business/video/list/` call with 40130.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [app_id, access_token]
+              properties:
+                app_id:
+                  type: string
+                access_token:
+                  type: string
+      responses:
+        '200':
+          description: Envelope carrying the token info
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TokenInfo'
+
+  # Profile
+  /business/get/:
+    get:
+      tags: [Profile]
+      summary: Read the authorized account profile
+      operationId: getBusinessProfile
+      description: |
+        All or nothing: one field the token lacks the scope for rejects the WHOLE call with 40130,
+        so build the field list from the scopes `/tt_user/token_info/get/` reports and fall back to
+        display_name plus profile_image.
+
+        `open_id`, `union_id`, `avatar_url`, `account_type`, `profile_web_link`, `follower_count`,
+        `likes_count` and `video_count` do NOT exist on this endpoint and return 40002
+        `field does not exist`. The developer lane names are not the business lane names.
+      security:
+        - AccessToken: []
+      parameters:
+        - name: business_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'The creator_id from /tt_user/token_info/get/'
+        - name: fields
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'JSON encoded array of field names, for example ["display_name","profile_image"]'
+      responses:
+        '200':
+          description: 'Envelope. code 40130 when a requested field is out of scope, 40002 when it does not exist here.'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/BusinessProfile'
+
+  # Publishing
+  /business/video/publish/:
+    post:
+      tags: [Publishing]
+      summary: Publish a public video post
+      operationId: publishBusinessVideo
+      description: |
+        Publishes a PUBLIC video. There is no privacy field on this endpoint, so `SELF_ONLY`,
+        `FOLLOWER_OF_CREATOR` and `MUTUAL_FOLLOW_FRIENDS` are unreachable here. Set
+        `post_info.upload_to_draft` to send the video to the app drafts instead, which is the only
+        route to a non public video on this lane.
+
+        Capped at six posts per minute and 15 videos per account per rolling 24 hours, counted
+        separately from photo posts. The 16th is deferred and auto published rather than failed.
+
+        `video_url` must be on a domain verified as a URL property of the business app or the call
+        is refused with 40002 and a URL ownership verification message. Accepted, but the response
+        only carries a `share_id`: poll `/business/publish/status/` or take the
+        `post.publish.*` webhooks.
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, video_url, post_info]
+              properties:
+                business_id:
+                  type: string
+                video_url:
+                  type: string
+                  format: uri
+                  description: Pull URL on a verified domain
+                custom_thumbnail_url:
+                  type: string
+                  format: uri
+                  description: 'Cover image URL on a verified domain. JPG, JPEG, WebP or PNG, 360x360 to 1080x1920, under 20 MB. It is a TOP LEVEL parameter, a sibling of video_url: nested inside post_info the endpoint ignores it. Overrides thumbnail_offset.'
+                post_info:
+                  type: object
+                  properties:
+                    caption:
+                      type: string
+                      description: 'Capped at 2200 characters. Hashtags are allowed here.'
+                    is_brand_organic:
+                      type: boolean
+                    is_branded_content:
+                      type: boolean
+                    disable_comment:
+                      type: boolean
+                    disable_duet:
+                      type: boolean
+                    disable_stitch:
+                      type: boolean
+                    is_ai_generated:
+                      type: boolean
+                      description: AI generated content disclosure
+                    thumbnail_offset:
+                      type: integer
+                      description: 'Cover frame offset in milliseconds. Ignored when custom_thumbnail_url is set.'
+                    upload_to_draft:
+                      type: boolean
+                      description: 'Send the video to the Creator Inbox drafts instead of publishing. The creator picks the audience in the app, which is the only way to reach a non public video on this lane.'
+      responses:
+        '200':
+          description: Envelope carrying the publish id
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PublishAccepted'
+
+  /business/photo/publish/:
+    post:
+      tags: [Publishing]
+      summary: Publish a photo post
+      operationId: publishBusinessPhotoPost
+      description: |
+        Accepts JPG, JPEG and WebP only, so a PNG has to be re encoded before it is offered here.
+        Every image URL must be on a domain verified as a URL property of the business app.
+
+        The text splits in two: `title` is 90 runes and renders hashtags and URLs as plain text, so
+        strip them, while `caption` is 4000 runes and does render hashtags. Unlike the video
+        endpoint this one keeps `privacy_level`, and it has NO AI disclosure field at all.
+
+        Capped at six posts per minute and 15 photo posts per account per rolling 24 hours, counted
+        separately from videos.
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, photo_images, post_info]
+              properties:
+                business_id:
+                  type: string
+                photo_images:
+                  type: array
+                  description: 'Image pull URLs on a verified domain, JPG, JPEG or WebP'
+                  items:
+                    type: string
+                    format: uri
+                photo_cover_index:
+                  type: integer
+                  description: Zero based index into photo_images for the cover
+                post_info:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: 'Up to 90 runes. Hashtags and URLs render as plain text here, so they belong in caption.'
+                    caption:
+                      type: string
+                      description: 'Up to 4000 runes. Hashtags are rendered.'
+                    privacy_level:
+                      type: string
+                      description: 'The audience. Read the values this account may use from privacy_level_options on /business/video/settings/; PUBLIC_TO_EVERYONE is the verified one.'
+                    is_brand_organic:
+                      type: boolean
+                    is_branded_content:
+                      type: boolean
+                    auto_add_music:
+                      type: boolean
+                    disable_comment:
+                      type: boolean
+                    is_draft:
+                      type: boolean
+                      description: 'Send to the app drafts. Note the name differs from the video endpoint, which uses upload_to_draft.'
+      responses:
+        '200':
+          description: Envelope carrying the publish id
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PublishAccepted'
+
+  /business/publish/status/:
+    get:
+      tags: [Publishing]
+      summary: Poll the status of a publish
+      operationId: getBusinessPublishStatus
+      description: |
+        Takes the `share_id` returned by a publish call as `publish_id`. Post ids arrive after
+        PUBLISH_COMPLETE and can lag it by about three minutes, so an empty `post_ids` on a
+        complete publish is normal.
+
+        Every call is charged to the app wide QPM budget shared with the Marketing API, so prefer
+        the `post.publish.*` webhooks and poll only as a net.
+      security:
+        - AccessToken: []
+      parameters:
+        - name: business_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: publish_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The share_id returned by the publish call
+      responses:
+        '200':
+          description: Envelope carrying the publish status
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PublishStatus'
+
+  /business/video/settings/:
+    get:
+      tags: [Publishing]
+      summary: Read the account posting settings
+      operationId: getBusinessVideoSettings
+      description: 'The business lane equivalent of the developer lane creator info query. Returns the interaction locks the creator set in the app, the audiences available to photo posts and the maximum video duration.'
+      security:
+        - AccessToken: []
+      parameters:
+        - name: business_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Envelope carrying the settings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/VideoSettings'
+
+  # Analytics
+  /business/video/list/:
+    get:
+      tags: [Analytics]
+      summary: List the account posts with counters and insights
+      operationId: listBusinessVideos
+      description: |
+        Requires the `video.list` scope, so without it there is no way to enumerate an account
+        posts and a video id has to come from elsewhere such as a post URL or the comment webhook.
+        The insight fields additionally require `video.insights`.
+
+        One unknown or out of scope field name rejects the WHOLE call, with the allowed list in the
+        message, so request the insight fields only when the scope is granted.
+
+        Two modes. Pass `filters` with `video_ids` to fetch specific posts, or page backwards in
+        time from `cursor`. Paging returns every public post of the account, whether or not it was
+        published through the API.
+      security:
+        - AccessToken: []
+      parameters:
+        - name: business_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: fields
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'JSON encoded array of field names, for example ["item_id","caption","likes"]'
+        - name: filters
+          in: query
+          schema:
+            type: string
+          description: 'JSON encoded object. Only video_ids is verified, for example {"video_ids": ["7300000000000000000"]}'
+        - name: max_count
+          in: query
+          schema:
+            type: integer
+          description: Page size
+        - name: cursor
+          in: query
+          schema:
+            type: integer
+          description: 'Millisecond timestamp to page backwards from, defaulting to now'
+      responses:
+        '200':
+          description: Envelope carrying one page of posts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          videos:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Video'
+                          has_more:
+                            type: boolean
+                          cursor:
+                            type: integer
+
+  # Comments
+  /business/comment/list/:
+    get:
+      tags: [Comments]
+      summary: List the comments on a post
+      operationId: listBusinessComments
+      description: |
+        Reads comment bodies, authors and counts. This has no equivalent on the developer lane,
+        where comment management is write only.
+
+        Works on the `comment.list` scope alone, and does NOT need a Business account: verified on
+        a personal account. It validates the id, so a well formed but non existent `video_id` is
+        40002 `video_id is invalid`.
+      security:
+        - AccessToken: []
+      parameters:
+        - name: business_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: video_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: include_replies
+          in: query
+          schema:
+            type: boolean
+          description: 'Inline each comment replies as reply_list'
+        - name: sort_field
+          in: query
+          schema:
+            type: string
+          description: 'create_time is the verified value'
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+        - name: max_count
+          in: query
+          schema:
+            type: integer
+            maximum: 30
+          description: 'Page size, capped at 30'
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Envelope carrying one page of comments
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/CommentPage'
+
+  /business/comment/reply/list/:
+    get:
+      tags: [Comments]
+      summary: List the replies to a comment
+      operationId: listBusinessCommentReplies
+      description: 'Eventually consistent: a reply created through /business/comment/reply/create/ was absent immediately and present about five seconds later, so an empty list right after a write is not a failure.'
+      security:
+        - AccessToken: []
+      parameters:
+        - name: business_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: video_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: comment_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: sort_field
+          in: query
+          schema:
+            type: string
+          description: 'create_time is the verified value'
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+        - name: max_count
+          in: query
+          schema:
+            type: integer
+            maximum: 30
+          description: 'Page size, capped at 30'
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Envelope carrying one page of replies
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/CommentPage'
+
+  /business/comment/create/:
+    post:
+      tags: [Comments]
+      summary: Comment on a post
+      operationId: createBusinessComment
+      description: 'Needs comment.list.manage. Does not need a Business account.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, video_id, text]
+              properties:
+                business_id:
+                  type: string
+                video_id:
+                  type: string
+                text:
+                  type: string
+      responses:
+        '200':
+          description: Envelope carrying the new comment id
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comment_id:
+                            type: string
+
+  /business/comment/reply/create/:
+    post:
+      tags: [Comments]
+      summary: Reply to a comment
+      operationId: createBusinessCommentReply
+      description: 'The reply is not immediately visible on /business/comment/reply/list/, which settles a few seconds later.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, video_id, comment_id, text]
+              properties:
+                business_id:
+                  type: string
+                video_id:
+                  type: string
+                comment_id:
+                  type: string
+                text:
+                  type: string
+      responses:
+        '200':
+          description: Envelope carrying the new comment id
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comment_id:
+                            type: string
+
+  /business/comment/delete/:
+    post:
+      tags: [Comments]
+      summary: Delete a comment
+      operationId: deleteBusinessComment
+      description: 'Only the account own comments and replies can be deleted. Anyone else comment can only be hidden.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, comment_id]
+              properties:
+                business_id:
+                  type: string
+                comment_id:
+                  type: string
+      responses:
+        '200':
+          description: Envelope with an empty data object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+
+  /business/comment/hide/:
+    post:
+      tags: [Comments]
+      summary: Hide or unhide a comment
+      operationId: setBusinessCommentHidden
+      description: |
+        Works on third party comments as well as the account own.
+
+        40002 here is not always a caller error: an UNHIDE fired a few hundred milliseconds after
+        the HIDE on the same reply once answered 40002 `Something is wrong. Please try again
+        later.`, and the same pair succeeded on two other runs. A fast toggle can therefore see an
+        error where a retry would have worked.
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, comment_id, video_id, action]
+              properties:
+                business_id:
+                  type: string
+                comment_id:
+                  type: string
+                video_id:
+                  type: string
+                action:
+                  type: string
+                  enum: [HIDE, UNHIDE]
+      responses:
+        '200':
+          description: Envelope with an empty data object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+
+  /business/comment/like/:
+    post:
+      tags: [Comments]
+      summary: Like or unlike a comment
+      operationId: setBusinessCommentLiked
+      description: 'Works on third party comments. Unlike hide and pin, this one does not take video_id.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, comment_id, action]
+              properties:
+                business_id:
+                  type: string
+                comment_id:
+                  type: string
+                action:
+                  type: string
+                  enum: [LIKE, UNLIKE]
+      responses:
+        '200':
+          description: Envelope with an empty data object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+
+  /business/comment/pin/:
+    post:
+      tags: [Comments]
+      summary: Pin or unpin a comment
+      operationId: setBusinessCommentPinned
+      description: |
+        Undocumented by TikTok. The body mirrors /business/comment/hide/ and was verified live on
+        both a third party comment and the account own comment.
+
+        A comment created seconds earlier cannot be pinned yet: 40002 `Comment is not allowed for
+        manage type PIN, please check comment status`, which cleared about 25 seconds later, so it
+        is a freshness state rather than an ownership rule. Unpinning a comment that is not pinned
+        is 40002 `Comment is not pinned`.
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, comment_id, video_id, action]
+              properties:
+                business_id:
+                  type: string
+                comment_id:
+                  type: string
+                video_id:
+                  type: string
+                action:
+                  type: string
+                  enum: [PIN, UNPIN]
+      responses:
+        '200':
+          description: Envelope with an empty data object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+
+  # Business Messaging
+  /business/message/send/:
+    post:
+      tags: [Messaging]
+      summary: Send a direct message
+      operationId: sendBusinessMessage
+      description: |
+        POST only: a GET answers with a plain text `Method Not Allowed`, not JSON.
+
+        Sends land only inside the TikTok 48 hour and 10 message window after the user last
+        message. Nothing exposes the window, so the error is the only signal.
+
+        An account that is not eligible for Business Messaging gets 40105
+        `Access token is invalid`, which is misleading: the same token still works on
+        /tt_user/token_info/get/, /business/get/ and /business/comment/list/, and a malformed
+        messaging call returns an ordinary 40002, so the 40105 is raised only AFTER parameter
+        validation passes. Eligibility has three parts and the error names none of them. The
+        account must be a TikTok Business account; its sign up region must not be the EEA,
+        Switzerland or the UK; and the app must have passed the TikTok Data Security and Privacy
+        review. Only the first is visible to code, through is_business_account on /business/get/.
+        A wrong business_id is a different error, 40001 `No permission to operate tiktok creator id`.
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, recipient_type, recipient, message_type]
+              properties:
+                business_id:
+                  type: string
+                recipient_type:
+                  type: string
+                  enum: [CONVERSATION]
+                recipient:
+                  type: string
+                  description: The conversation id
+                message_type:
+                  type: string
+                  enum: [TEXT, IMAGE]
+                text:
+                  type: object
+                  description: 'Required when message_type is TEXT'
+                  properties:
+                    body:
+                      type: string
+                image:
+                  type: object
+                  description: 'Required when message_type is IMAGE'
+                  properties:
+                    media_id:
+                      type: string
+                      description: 'From /business/message/media/upload/'
+      responses:
+        '200':
+          description: Envelope carrying the sent message
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/SentMessage'
+
+  /business/message/media/upload/:
+    post:
+      tags: [Messaging]
+      summary: Upload an image for a direct message
+      operationId: uploadBusinessMessageMedia
+      description: 'Multipart, not JSON. Returns a media_id valid for 30 days, which is then sent as image.media_id on /business/message/send/.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [business_id, media_type, file]
+              properties:
+                business_id:
+                  type: string
+                media_type:
+                  type: string
+                  enum: [IMAGE]
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Envelope carrying the media id
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          media_id:
+                            type: string
+
+  /business/message/media/download/:
+    post:
+      tags: [Messaging]
+      summary: Mint a download URL for inbound message media
+      operationId: getBusinessMessageMediaDownloadUrl
+      description: 'Inbound direct message media has no public URL. This mints one that is valid for 24 hours and must be fetched with the access token in an x-user header, not an Access-Token header and not a bearer token.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [business_id, conversation_id, message_id, media_id, media_type]
+              properties:
+                business_id:
+                  type: string
+                conversation_id:
+                  type: string
+                message_id:
+                  type: string
+                media_id:
+                  type: string
+                media_type:
+                  type: string
+                  enum: [IMAGE, VIDEO]
+      responses:
+        '200':
+          description: Envelope carrying the download URL
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          download_url:
+                            type: string
+                            format: uri
+                            description: 'Valid for 24 hours. Fetch it with an x-user header carrying the access token.'
+
+security:
+  - AccessToken: []
+
+tags:
+  - name: OAuth
+    description: 'Authorization, token exchange and token introspection on the TikTok for Business app'
+  - name: Profile
+    description: Account profile reads
+  - name: Publishing
+    description: 'Video and photo publishing, posting settings and publish status'
+  - name: Analytics
+    description: Post listing with counters and video insights
+  - name: Comments
+    description: 'Comment management, read and write on this lane'
+  - name: Messaging
+    description: 'Business Messaging, gated on account type, sign up region and app review'
+
+externalDocs:
+  description: TikTok for Business Accounts API
+  url: https://business-api.tiktok.com/portal/docs

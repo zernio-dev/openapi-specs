@@ -1,8 +1,31 @@
 openapi: 3.0.3
 info:
-  title: TikTok Business APIs
-  description: TikTok Business API endpoints used by Zernio for content publishing, creator management, and analytics
-  version: 2.0.0
+  title: TikTok Content Posting, Display and Research APIs
+  description: |
+    The developer lane of TikTok, hosted on `open.tiktokapis.com` and registered through
+    developers.tiktok.com. It covers the Content Posting API, the Display API and the Research API.
+
+    **This is not the TikTok Business API.** TikTok ships two unrelated organic surfaces and an
+    integration has to pick one:
+
+    | | This spec | `tiktok-business.yaml` |
+    | --- | --- | --- |
+    | Host | `open.tiktokapis.com` | `business-api.tiktok.com` |
+    | Portal | developers.tiktok.com | business-api.tiktok.com/portal |
+    | Identity | `open_id` from the developer app | `creator_id` from the business app |
+    | Auth header | `Authorization: Bearer` | `Access-Token` |
+    | Errors | HTTP status plus an `error` object | always HTTP 200, `code` is the only success signal |
+
+    `open_id` is app scoped, so the same TikTok account has a different id under each app and one
+    connection never spans both lanes.
+
+    **Lane specific behaviour recorded here:**
+    - Comment management is write only on this lane. There is no endpoint that reads comments.
+      The business lane does have comment reads, see `tiktok-business.yaml`.
+    - Video posts accept the full `privacy_level` vocabulary, including `SELF_ONLY`,
+      `FOLLOWER_OF_CREATOR` and `MUTUAL_FOLLOW_FRIENDS`.
+    - The app wide constraint is a daily distinct active users quota, not a per account post cap.
+  version: 2.1.0
   contact:
     name: Zernio Support
     url: https://zernio.com
@@ -190,21 +213,20 @@ components:
           description: Current publishing status
         fail_reason:
           type: string
-          enum: [
-            auth_removed,
-            file_format_check_failed,
-            duration_check_failed, 
-            frame_rate_check_failed,
-            picture_size_check_failed,
-            video_pull_failed,
-            photo_pull_failed,
-            spam_risk_too_many_posts,
-            spam_risk_user_banned_from_posting,
-            spam_risk_text,
-            spam_risk,
-            internal,
-            publish_cancelled
-          ]
+          enum:
+            - auth_removed
+            - file_format_check_failed
+            - duration_check_failed
+            - frame_rate_check_failed
+            - picture_size_check_failed
+            - video_pull_failed
+            - photo_pull_failed
+            - spam_risk_too_many_posts
+            - spam_risk_user_banned_from_posting
+            - spam_risk_text
+            - spam_risk
+            - internal
+            - publish_cancelled
           description: Failure reason if status is FAILED
         publicly_available_post_id:
           type: array
@@ -1204,25 +1226,6 @@ paths:
                           video_count:
                             type: integer
 
-  # Creator Info Query (for UX compliance)
-  /post/publish/creator_info/query/:
-    get:
-      summary: Get creator information for UX compliance (alternative endpoint)
-      operationId: getCreatorInfoForUxAlt
-      description: Alternative GET endpoint for creator information
-      security:
-        - AccessToken: []
-      responses:
-        '200':
-          description: Creator information with UX requirements
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/CreatorInfo'
-
   # Share Kit - Direct Share to TikTok App
   /share/video/:
     post:
@@ -1418,7 +1421,7 @@ tags:
   - name: Analytics
     description: Video analytics and metrics
   - name: Comments
-    description: Comment management (write-only)
+    description: 'Comment management, write only on this lane (no comment read endpoint exists here)'
   - name: Upload
     description: File upload operations
   - name: Research

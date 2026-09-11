@@ -20,13 +20,21 @@ Use these specs to explore, test, and build integrations with the APIs behind th
 | Facebook | `facebook.yaml` | 28 | Official docs |
 | Snapchat | `snapchat.yaml` | 27 | Official docs |
 | LinkedIn | `linkedin.yaml` | 27 | Official docs |
-| TikTok | `tiktok.yaml` | 23 | Official docs |
-| **Total** | | **761** | **13 platforms** |
+| TikTok (developer lane) | `tiktok.yaml` | 22 | Official docs |
+| TikTok for Business | `tiktok-business.yaml` | 21 | Official docs + live verification |
+| **Total** | | **781** | **13 platforms, 14 specs** |
+
+> **TikTok ships two unrelated organic APIs.** `tiktok.yaml` is the developer lane on
+> `open.tiktokapis.com` (Content Posting, Display, Research). `tiktok-business.yaml` is the
+> TikTok for Business lane on `business-api.tiktok.com` (Accounts, publishing, comment reads,
+> Business Messaging). They use different hosts, different portals, different auth headers and
+> app-scoped identities that do not map onto each other, so an integration picks one.
 
 ## 🔍 Sources
 
 - **Official specs** — Downloaded directly from platform-maintained repositories (Pinterest, Twitter/X, Telegram)
 - **Official docs** — Hand-crafted from official API documentation, covering all available endpoints
+- **Official docs + live verification**: hand-crafted from official documentation and corrected against live production responses where the docs are absent or wrong
 
 ## 🚀 Usage
 
