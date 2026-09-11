@@ -359,16 +359,16 @@ components:
           description: Optional. A chat photo was changed to this value
         delete_chat_photo:
           type: boolean
-          description: Optional. Service message: the chat photo was deleted
+          description: 'Optional. Service message: the chat photo was deleted'
         group_chat_created:
           type: boolean
-          description: Optional. Service message: the group has been created
+          description: 'Optional. Service message: the group has been created'
         supergroup_chat_created:
           type: boolean
-          description: Optional. Service message: the supergroup has been created
+          description: 'Optional. Service message: the supergroup has been created'
         channel_chat_created:
           type: boolean
-          description: Optional. Service message: the channel has been created
+          description: 'Optional. Service message: the channel has been created'
         message_auto_delete_timer_changed:
           $ref: '#/components/schemas/MessageAutoDeleteTimerChanged'
         migrate_to_chat_id:
@@ -1698,6 +1698,7 @@ components:
 
     LinkPreviewOptions:
       type: object
+      description: Describes the options used for link preview generation
       properties:
         is_disabled:
           type: boolean
@@ -1768,6 +1769,7 @@ components:
 
     UsersShared:
       type: object
+      description: This object contains information about the users whose identifiers were shared with the bot
       properties:
         request_id:
           type: integer
@@ -1795,6 +1797,7 @@ components:
 
     ChatShared:
       type: object
+      description: This object contains information about the chat whose identifier was shared with the bot
       properties:
         request_id:
           type: integer
@@ -1812,6 +1815,7 @@ components:
 
     WriteAccessAllowed:
       type: object
+      description: This object represents a service message about a user allowing a bot to write messages
       properties:
         from_request:
           type: boolean
@@ -2619,22 +2623,6 @@ components:
     GiveawayCompleted:
       type: object
       description: This object represents a service message about the completion of a giveaway without public winners
-
-    LinkPreviewOptions:
-      type: object
-      description: Describes the options used for link preview generation
-
-    UsersShared:
-      type: object
-      description: This object contains information about the users whose identifiers were shared with the bot
-
-    ChatShared:
-      type: object
-      description: This object contains information about the chat whose identifier was shared with the bot
-
-    WriteAccessAllowed:
-      type: object
-      description: This object represents a service message about a user allowing a bot to write messages
 
     PassportData:
       type: object

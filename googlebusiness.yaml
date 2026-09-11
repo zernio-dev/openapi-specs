@@ -507,17 +507,24 @@ paths:
       security:
         - OAuth2: [https://www.googleapis.com/auth/business.manage]
 
-  /v4/{name}:
+  /v4/{parent}/localPosts/{localPostId}:
     get:
       tags: [Local Posts]
       summary: Get local post
       operationId: getLocalPost
       description: Gets the specified local post
       parameters:
-        - name: name
+        - name: parent
           in: path
           required: true
-          description: Local post resource name
+          description: Location resource name that owns the post, `accounts/{accountId}/locations/{locationId}`
+          schema:
+            type: string
+            example: "accounts/123456789/locations/987654321"
+        - name: localPostId
+          in: path
+          required: true
+          description: Local post id, the trailing segment of `accounts/{accountId}/locations/{locationId}/localPosts/{localPostId}`
           schema:
             type: string
       responses:
@@ -538,10 +545,17 @@ paths:
       operationId: updateLocalPost
       description: Updates the specified local post
       parameters:
-        - name: name
+        - name: parent
           in: path
           required: true
-          description: Local post resource name
+          description: Location resource name that owns the post, `accounts/{accountId}/locations/{locationId}`
+          schema:
+            type: string
+            example: "accounts/123456789/locations/987654321"
+        - name: localPostId
+          in: path
+          required: true
+          description: Local post id, the trailing segment of `accounts/{accountId}/locations/{locationId}/localPosts/{localPostId}`
           schema:
             type: string
         - name: updateMask
@@ -575,10 +589,17 @@ paths:
       operationId: deleteLocalPost
       description: Deletes the specified local post
       parameters:
-        - name: name
+        - name: parent
           in: path
           required: true
-          description: Local post resource name
+          description: Location resource name that owns the post, `accounts/{accountId}/locations/{locationId}`
+          schema:
+            type: string
+            example: "accounts/123456789/locations/987654321"
+        - name: localPostId
+          in: path
+          required: true
+          description: Local post id, the trailing segment of `accounts/{accountId}/locations/{locationId}/localPosts/{localPostId}`
           schema:
             type: string
       responses:
@@ -959,7 +980,7 @@ paths:
               basicRequest:
                 metricRequests:
                   - metric: "QUERIES_DIRECT"
-                  options: ["AGGREGATION_METHOD_DAILY_VALUES"]
+                    options: ["AGGREGATION_METHOD_DAILY_VALUES"]
                   - metric: "QUERIES_INDIRECT"
                   - metric: "VIEWS_MAPS"
                   - metric: "VIEWS_SEARCH"
@@ -1586,7 +1607,7 @@ paths:
         - OAuth2: [https://www.googleapis.com/auth/business.manage]
 
   # Chains v1
-  /v1/{name}:
+  /v1/chains/{chainId}:
     get:
       tags: [Chains]
       summary: Get chain
@@ -1594,10 +1615,10 @@ paths:
       servers:
         - url: https://mybusinessbusinessinformation.googleapis.com
       parameters:
-        - name: name
+        - name: chainId
           in: path
           required: true
-          description: Chain resource name (chains/{chainId})
+          description: Chain id, the trailing segment of the `chains/{chainId}` resource name
           schema:
             type: string
       responses:
@@ -1755,7 +1776,7 @@ paths:
       security:
         - OAuth2: [https://www.googleapis.com/auth/business.manage]
 
-  /v1/{name}:
+  /v1/{parent}/placeActionLinks/{placeActionLinkId}:
     get:
       tags: [Place Actions]
       summary: Get place action link
@@ -1763,10 +1784,17 @@ paths:
       servers:
         - url: https://mybusinessplaceactions.googleapis.com
       parameters:
-        - name: name
+        - name: parent
           in: path
           required: true
-          description: Place action link resource name (locations/{locationId}/placeActionLinks/{linkId})
+          description: Location resource name that owns the link, `locations/{locationId}`
+          schema:
+            type: string
+            example: "locations/987654321"
+        - name: placeActionLinkId
+          in: path
+          required: true
+          description: Place action link id, the trailing segment of `locations/{locationId}/placeActionLinks/{placeActionLinkId}`
           schema:
             type: string
       responses:
@@ -1788,10 +1816,16 @@ paths:
       servers:
         - url: https://mybusinessplaceactions.googleapis.com
       parameters:
-        - name: name
+        - name: parent
           in: path
           required: true
-          description: Place action link resource name
+          description: Location resource name that owns the link, `locations/{locationId}`
+          schema:
+            type: string
+        - name: placeActionLinkId
+          in: path
+          required: true
+          description: Place action link id, the trailing segment of `locations/{locationId}/placeActionLinks/{placeActionLinkId}`
           schema:
             type: string
         - name: updateMask
@@ -1827,10 +1861,16 @@ paths:
       servers:
         - url: https://mybusinessplaceactions.googleapis.com
       parameters:
-        - name: name
+        - name: parent
           in: path
           required: true
-          description: Place action link resource name
+          description: Location resource name that owns the link, `locations/{locationId}`
+          schema:
+            type: string
+        - name: placeActionLinkId
+          in: path
+          required: true
+          description: Place action link id, the trailing segment of `locations/{locationId}/placeActionLinks/{placeActionLinkId}`
           schema:
             type: string
       responses:
@@ -2005,10 +2045,11 @@ components:
 
     PostalAddress:
       type: object
+      description: Physical address
       properties:
         regionCode:
           type: string
-          description: Country code
+          description: CLDR region code
           example: "US"
         languageCode:
           type: string
@@ -2095,11 +2136,9 @@ components:
         endDate:
           $ref: '#/components/schemas/Date'
         openTime:
-          type: string
-          description: Opening time
+          $ref: '#/components/schemas/TimeOfDay'
         closeTime:
-          type: string
-          description: Closing time
+          $ref: '#/components/schemas/TimeOfDay'
         closed:
           type: boolean
           description: Whether the business is closed during this period
@@ -2488,11 +2527,20 @@ components:
       properties:
         metric:
           type: string
-          enum: [
-            QUERIES_DIRECT, QUERIES_INDIRECT, QUERIES_CHAIN, VIEWS_MAPS, VIEWS_SEARCH, 
-            ACTIONS_WEBSITE, ACTIONS_PHONE, ACTIONS_DRIVING_DIRECTIONS, PHOTOS_VIEWS_MERCHANT,
-            PHOTOS_VIEWS_CUSTOMERS, PHOTOS_COUNT_MERCHANT, PHOTOS_COUNT_CUSTOMERS, LOCAL_POST_VIEWS_SEARCH
-          ]
+          enum:
+            - QUERIES_DIRECT
+            - QUERIES_INDIRECT
+            - QUERIES_CHAIN
+            - VIEWS_MAPS
+            - VIEWS_SEARCH
+            - ACTIONS_WEBSITE
+            - ACTIONS_PHONE
+            - ACTIONS_DRIVING_DIRECTIONS
+            - PHOTOS_VIEWS_MERCHANT
+            - PHOTOS_VIEWS_CUSTOMERS
+            - PHOTOS_COUNT_MERCHANT
+            - PHOTOS_COUNT_CUSTOMERS
+            - LOCAL_POST_VIEWS_SEARCH
           description: Metric to request
         options:
           type: array
@@ -3131,30 +3179,6 @@ components:
         localizedDisplayName:
           type: string
 
-    PostalAddress:
-      type: object
-      description: Physical address
-      properties:
-        regionCode:
-          type: string
-          description: CLDR region code
-        languageCode:
-          type: string
-        postalCode:
-          type: string
-        administrativeArea:
-          type: string
-        locality:
-          type: string
-        addressLines:
-          type: array
-          items:
-            type: string
-        recipients:
-          type: array
-          items:
-            type: string
-
     ServiceArea:
       type: object
       properties:
@@ -3175,14 +3199,6 @@ components:
                     type: string
         regionCode:
           type: string
-
-    LatLng:
-      type: object
-      properties:
-        latitude:
-          type: number
-        longitude:
-          type: number
 
     LocationMetadataV1:
       type: object
@@ -3281,44 +3297,6 @@ components:
           type: string
         label:
           $ref: '#/components/schemas/MenuLabel'
-
-    SpecialHours:
-      type: object
-      properties:
-        specialHourPeriods:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpecialHourPeriod'
-
-    SpecialHourPeriod:
-      type: object
-      properties:
-        startDate:
-          $ref: '#/components/schemas/Date'
-        openTime:
-          $ref: '#/components/schemas/TimeOfDay'
-        endDate:
-          $ref: '#/components/schemas/Date'
-        closeTime:
-          $ref: '#/components/schemas/TimeOfDay'
-        closed:
-          type: boolean
-
-    TimeOfDay:
-      type: object
-      properties:
-        hours:
-          type: integer
-          minimum: 0
-          maximum: 23
-        minutes:
-          type: integer
-          minimum: 0
-          maximum: 59
-        seconds:
-          type: integer
-        nanos:
-          type: integer
 
     ListLocationsResponseV1:
       type: object
