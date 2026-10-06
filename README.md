@@ -11,6 +11,7 @@ Use these specs to explore, test, and build integrations with the APIs behind th
 | Pinterest | `pinterest.yaml` | 236 | Official spec |
 | Twitter/X | `twitter.yaml` | 147 | Official spec |
 | Reddit | `reddit.yaml` | 50 | Official docs |
+| Reddit Ads | `reddit-ads.yaml` | 109 | Official spec (OpenAPI 3.1) |
 | YouTube | `youtube.yaml` | 42 | Official docs |
 | Instagram | `instagram.yaml` | 36 | Official docs |
 | Telegram | `telegram.yaml` | 34 | Official spec |
@@ -22,7 +23,7 @@ Use these specs to explore, test, and build integrations with the APIs behind th
 | LinkedIn | `linkedin.yaml` | 27 | Official docs |
 | TikTok (developer lane) | `tiktok.yaml` | 22 | Official docs |
 | TikTok for Business | `tiktok-business.yaml` | 21 | Official docs + live verification |
-| **Total** | | **781** | **13 platforms, 14 specs** |
+| **Total** | | **890** | **13 platforms, 15 specs** |
 
 > **TikTok ships two unrelated organic APIs.** `tiktok.yaml` is the developer lane on
 > `open.tiktokapis.com` (Content Posting, Display, Research). `tiktok-business.yaml` is the
@@ -32,7 +33,7 @@ Use these specs to explore, test, and build integrations with the APIs behind th
 
 ## 🔍 Sources
 
-- **Official specs** — Downloaded directly from platform-maintained repositories (Pinterest, Twitter/X, Telegram)
+- **Official specs**: downloaded directly from platform-maintained repositories (Pinterest, Twitter/X, Telegram) or the platform's own published spec (Reddit Ads, `https://ads-api.reddit.com/api/v3/openapi.json`)
 - **Official docs** — Hand-crafted from official API documentation, covering all available endpoints
 - **Official docs + live verification**: hand-crafted from official documentation and corrected against live production responses where the docs are absent or wrong
 
